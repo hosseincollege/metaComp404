@@ -16,12 +16,16 @@ function CameraFlyTo({ targetPosition, isFlying, setIsFlying }) {
   useFrame((_, delta) => {
     if (!isFlying || !controls) return;
 
-    desiredTarget.set(targetPosition[0], targetPosition[1], targetPosition[2]);
+    desiredTarget.set(targetPosition[0] + 0, targetPosition[1] + 0, targetPosition[2] + 0);
 
     if (targetPosition[0] === 0 && targetPosition[1] === 0 && targetPosition[2] === 0) {
       desiredPos.set(0, 8, 40);
     } else {
-      desiredPos.set(targetPosition[0], targetPosition[1] + 2, targetPosition[2] + 5);
+      desiredPos.set(
+        targetPosition[0] + 0,
+        targetPosition[1] + 2,
+        targetPosition[2] + 12
+      );
     }
 
     const speed = delta * 3;
@@ -50,11 +54,11 @@ function TopicTooltip({ topic, position, onClose }) {
   return (
     <Html
       transform={false}
-      distanceFactor={1}
+      distanceFactor={5}
       position={[
-        position[0] + 2.2, 
-        position[1] + 0.65,
-        position[2]
+        position[0] + 0.8, 
+        position[1] - 0.65,
+        position[2] + 0.0,
       ]}
       style={{
         background: "rgba(15,15,20,0.92)",
@@ -114,7 +118,7 @@ function TopicTooltip({ topic, position, onClose }) {
         <p
           style={{
             marginTop: 12,
-            fontSize: "2.8rem",          // خیلی درشت
+            fontSize: "3.5rem",          // خیلی درشت
             lineHeight: 2.4,
             color: "#e2e8f0",
             fontWeight: "350",
@@ -142,7 +146,7 @@ function TopicTooltip({ topic, position, onClose }) {
             <strong
               style={{
                 color: "#fbbf24",
-                fontSize: "2.5rem",
+                fontSize: "3rem",
                 display: "block",
                 marginBottom: "12px",
                 direction: detectDir(s.title),
@@ -155,7 +159,7 @@ function TopicTooltip({ topic, position, onClose }) {
             <p
               style={{
                 margin: 0,
-                fontSize: "2.2rem",
+                fontSize: "3.2rem",
                 color: "#cbd5e1",
                 lineHeight: 2.1,
                 direction: detectDir(s.content),
