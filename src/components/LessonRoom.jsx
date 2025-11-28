@@ -16,7 +16,7 @@ function CameraFlyTo({ targetPosition, isFlying, setIsFlying }) {
   useFrame((_, delta) => {
     if (!isFlying || !controls) return;
 
-    desiredTarget.set(targetPosition[0] + 0, targetPosition[1] + 0, targetPosition[2] + 0);
+    desiredTarget.set(targetPosition[0] + 3, targetPosition[1] - 3, targetPosition[2] + 0);
 
     if (targetPosition[0] === 0 && targetPosition[1] === 0 && targetPosition[2] === 0) {
       desiredPos.set(0, 8, 40);
@@ -24,7 +24,7 @@ function CameraFlyTo({ targetPosition, isFlying, setIsFlying }) {
       desiredPos.set(
         targetPosition[0] + 0,
         targetPosition[1] + 2,
-        targetPosition[2] + 12
+        targetPosition[2] + 14
       );
     }
 
@@ -65,7 +65,7 @@ function TopicTooltip({ topic, position, onClose }) {
         backdropFilter: "blur(14px)",
         padding: "40px",                // 10× بزرگتر از قبل
         borderRadius: "26px",
-        width: "1200px",                // قبلاً 420px → الان 10× بزرگ
+        width: "1400px",                // قبلاً 420px → الان 10× بزرگ
         color: "white",
         pointerEvents: "auto",
         border: "2px solid rgba(255,255,255,0.28)",
