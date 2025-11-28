@@ -1,671 +1,304 @@
-/* ================================================
-   LESSONROOM.JSX — META UNIVERSITY (OPTION A)
-   PART 1 / 4  —  (0–1000)
-   NO EXPLANATION • PURE CODE • CLEAN • FINAL
-=================================================== */
-
-import React, { useState, useRef, useMemo, useEffect } from "react";
+import React, { useState, useRef, useMemo } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import {
-  OrbitControls,
-  Html,
-  Text,
-  Stars,
-  Line,
-  Billboard,
-} from "@react-three/drei";
+import { OrbitControls, Stars, Html } from "@react-three/drei";
 import * as THREE from "three";
 
-import python from "../lessons/python";
-import networks from "../lessons/networks";
-import algorithms from "../lessons/algorithms";
-import iot from "../lessons/iot";
-import cloud from "../lessons/cloud";
+// کامپوننت‌های نمایش سه‌بعدی
+import ClassroomHorizontal from "./ClassroomHorizontal"; 
+import ClassroomFloors from "./ClassroomFloors";
+import ClassroomRandom from "./ClassroomRandom";
 
-/* ------------------ DATA NORMALIZATION ------------------ */
+/* ========================================================
+   1) Camera Fly-To (Smooth cinematic movement) - FIX FOR LOCK
+======================================================== */
+// هدف: حرکت نرم دوربین، و رها کردن کنترل‌ها پس از رسیدن
+function CameraFlyTo({ targetPosition, isFlying, setIsFlying }) {
+  const { camera, controls } = useThree();
+  // استفاده از useMemo برای جلوگیری از ایجاد مجدد اشیاء در هر رندر
+  const desiredPos = useMemo(() => new THREE.Vector3(0, 5, 35), []);
+  const desiredTarget = useMemo(() => new THREE.Vector3(0, 0, 0), []);
 
-function normalizeLesson(raw, name = "Course") {
-  if (Array.isArray(raw)) {
-    return {
-      title: name,
-      color: "#4eaaff",
-      chapters: raw.map((c, i) => ({
-        id: "ch" + i,
-        title: c.section || "Untitled",
-        topics: (c.topics || []).map((t, j) => ({
-          id: `t_${i}_${j}`,
-          title: t.title,
-          content: t.content,
-          subtopics: t.subtopics || [],
-        })),
-      })),
-    };
-  }
-  return raw;
+  useFrame((_, delta) => {
+    // فقط در صورتی که در حالت پرواز باشیم، موقعیت‌ها را به‌روز می‌کنیم
+    if (!isFlying || !controls) return;
+
+    // هدف نگاه جدید
+    desiredTarget.set(targetPosition[0], targetPosition[1], targetPosition[2]);
+
+    // موقعیت جدید دوربین
+    if (targetPosition[0] === 0 && targetPosition[1] === 0 && targetPosition[2] === 0) {
+        // نمای کلی
+        desiredPos.set(0, 5, 35);
+    } else {
+        // موقعیت نزدیک به گوی
+        desiredPos.set(targetPosition[0], targetPosition[1] + 1.5, targetPosition[2] + 4);
+    }
+    
+    // حرکت نرم (Lerp)
+    const speed = delta * 3; 
+    camera.position.lerp(desiredPos, speed); 
+    controls.target.lerp(desiredTarget, speed); 
+
+    controls.update();
+
+    // وقتی رسید، کنترل کامل به کاربر داده میشه (این خط جلوی قفل شدن را می‌گیرد)
+    if (camera.position.distanceTo(desiredPos) < 0.15) {
+      setIsFlying(false);
+    }
+  });
+
+  return null;
 }
 
-const LESSONS = {
-  python: normalizeLesson(python, "Python"),
-  networks: normalizeLesson(networks, "Networks"),
-  algorithms: normalizeLesson(algorithms, "Algorithms"),
-  iot: normalizeLesson(iot, "IoT"),
-  cloud: normalizeLesson(cloud, "Cloud"),
-};
+/* ========================================================
+   2) Tooltip 3D کنار گوی انتخاب‌شده (تنظیم موقعیت و دکمه بستن)
+======================================================== */
+function TopicTooltip({ topic, position, onClose }) {
+  if (!topic || !position) return null;
 
-/* ------------------ CONSTANT VIEW STATES ------------------ */
-
-const VIEW = {
-  LOBBY: "LOBBY",
-  CLASS: "CLASS",
-  TOPIC: "TOPIC",
-};
-
-/* ------------------ TOPIC MODAL ------------------ */
-
-function TopicModal({ topic, onClose }) {
-  if (!topic) return null;
   return (
-    <Html center zIndexRange={[100, 0]}>
-      <div
+    <Html
+      // موقعیت Tooltip بسیار نزدیک‌تر به گوی
+      position={[position[0] + 0.8, position[1] + 0.5, position[2]]} 
+      center
+      style={{
+        background: "rgba(15,23,42,0.85)",
+        padding: "14px",
+        borderRadius: "12px",
+        color: "white",
+        width: "220px",
+        pointerEvents: "auto",
+        border: "1px solid rgba(255,255,255,0.2)",
+        boxShadow: "0 6px 25px rgba(0,0,0,0.45)"
+      }}
+    >
+      {/* دکمه بستن (X) */}
+      <button
+        onClick={onClose}
         style={{
-          width: "480px",
-          maxHeight: "70vh",
-          overflowY: "auto",
-          padding: "20px",
-          background: "rgba(0,0,0,0.8)",
-          borderRadius: "12px",
-          border: "2px solid #4eaaff",
+          position: "absolute",
+          top: "5px",
+          right: "5px", 
+          width: "24px",
+          height: "24px",
+          borderRadius: "50%",
+          background: "rgba(255,255,255,0.1)",
+          border: "none",
           color: "white",
-          direction: "rtl",
-          pointerEvents: "auto",
+          cursor: "pointer",
+          fontSize: "16px",
+          lineHeight: "14px",
+          fontWeight: "bold",
+          padding: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 100
         }}
       >
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <h2>{topic.title}</h2>
-          <button
-            onClick={onClose}
+        ×
+      </button>
+      
+      <h4 style={{ margin: 0, color: "#38bdf8", fontSize: "1rem" }}>{topic.title}</h4>
+
+      {topic.content && (
+        <p style={{ marginTop: 6, fontSize: "0.85rem", lineHeight: 1.6 }}>
+          {topic.content}
+        </p>
+      )}
+
+      {topic.subtopics &&
+        topic.subtopics.map((s, i) => (
+          <div
+            key={i}
             style={{
-              background: "rgba(255,255,255,0.2)",
-              border: 0,
-              width: 32,
-              height: 32,
-              borderRadius: "50%",
-              color: "white",
-              cursor: "pointer",
+              marginTop: 8,
+              padding: 6,
+              borderRadius: 6,
+              background: "rgba(255,255,255,0.06)"
             }}
           >
-            ×
-          </button>
-        </div>
-
-        <p>{topic.content}</p>
-
-        {topic.subtopics &&
-          topic.subtopics.map((s, i) => (
-            <div
-              key={i}
-              style={{
-                marginTop: 12,
-                padding: 10,
-                borderRight: "3px solid #4eaaff",
-                background: "rgba(255,255,255,0.08)",
-              }}
-            >
-              <strong>{s.title}</strong>
-              <p style={{ margin: 0 }}>{s.content}</p>
-            </div>
-          ))}
-      </div>
+            <strong style={{ color: "#fbbf24" }}>• {s.title}</strong>
+            <p style={{ margin: "4px 0", fontSize: "0.8rem", color: "#cbd5e1" }}>
+              {s.content}
+            </p>
+          </div>
+        ))}
     </Html>
   );
 }
 
-/* ------------------ DATA STREAM (BEZIER LINE) ------------------ */
+/* ========================================================
+   3) Main Scene Component
+======================================================== */
+export default function LessonRoom({ lesson, onBack }) {
+  const [selectedTopic, setSelectedTopic] = useState(null);
+  const [targetPosition, setTargetPosition] = useState([0, 0, 0]); 
+  const [mode, setMode] = useState("random"); 
+  const [isFlying, setIsFlying] = useState(false); // ردیابی وضعیت پرواز
 
-function DataStream({ start, end, color }) {
-  const curve = useMemo(() => {
-    const p1 = new THREE.Vector3(...start);
-    const p2 = new THREE.Vector3(...end);
-    const mid = p1.clone().add(p2).multiplyScalar(0.5);
-    mid.y += 1.5;
-    return new THREE.QuadraticBezierCurve3(p1, mid, p2);
-  }, [start, end]);
+  /* کلیک روی گوی */
+  const handleTopicClick = (topicData, positionArray) => {
+    setSelectedTopic(topicData);
+    setTargetPosition(positionArray); 
+    setIsFlying(true); // شروع پرواز
+  };
 
-  const points = useMemo(() => curve.getPoints(40), [curve]);
+  /* بازگشت به نمای کلی یا بستن Tooltip */
+  const handleResetView = () => {
+    setSelectedTopic(null);
+    setTargetPosition([0, 0, 0]); 
+    setIsFlying(true); // شروع پرواز برای بازگشت
+  };
+  
+  /* فعال کردن مجدد کنترل‌ها توسط تعامل کاربر */
+  const handleUserInteraction = () => {
+    if (isFlying) {
+      setIsFlying(false);
+    }
+  };
 
+  if (!lesson)
+    return <div style={{ color: "white", padding: 50 }}>در حال بارگذاری...</div>;
+
+  /* ========================================================
+     UI + Canvas Scene
+  ======================================================== */
   return (
-    <Line
-      points={points}
-      color={color}
-      transparent
-      opacity={0.4}
-      lineWidth={1}
-    />
-  );
-}
+    <div style={{ width: "100vw", height: "100vh", background: "#020617", position: "relative" }}>
 
-/* ------------------ TOPIC NODE ------------------ */
-
-function TopicNode({ data, position, color, onSelect }) {
-  return (
-    <group position={position}>
-      <mesh
-        onClick={(e) => {
-          e.stopPropagation();
-          onSelect(data);
+      {/* --- UI Panel --- */}
+      <div
+        style={{
+          position: "absolute",
+          right: 20,
+          top: 20,
+          width: "240px",
+          zIndex: 30,
+          background: "rgba(30,41,59,0.8)",
+          backdropFilter: "blur(8px)",
+          borderRadius: "12px",
+          padding: "15px",
+          border: "1px solid rgba(255,255,255,0.1)",
+          color: "white"
         }}
       >
-        {/*زیرفصل*/}
-        <sphereGeometry args={[0.3, 24, 24]} />
-        <meshStandardMaterial color={color} />
-      </mesh>
-
-      <Billboard position={[0, 1, 0]}>
-        <Text fontSize={0.28} color="white">
-          {data.title}
-        </Text>
-      </Billboard>
-    </group>
-  );
-}
-
-/* ------------------ CHAPTER NODE (MAIN SPHERES) ------------------ */
-/*        Option A → topics around chapter (graph style)            */
-
-function ChapterNode({ chapter, position, color, onTopic }) {
-  const topics = chapter.topics || [];
-  const radius = 2;
-
-  return (
-    <group position={position}>
-      <mesh>
-        {/*سرفصل*/}
-        <sphereGeometry args={[0.6, 32, 32]} />
-        <meshStandardMaterial color={color} />
-      </mesh>
-
-      <Billboard position={[0, 2, 0]}>
-        <Text fontSize={0.45} color="white">
-          {chapter.title}
-        </Text>
-      </Billboard>
-
-      {topics.map((t, i) => {
-        const angle = (i / topics.length) * Math.PI * 2;
-        const x = Math.cos(angle) * radius;
-        const z = Math.sin(angle) * radius;
-        const pos = [x, 0, z];
-
-        return (
-          <group key={t.id}>
-            <DataStream start={[0, 0, 0]} end={pos} color={color} />
-
-            <TopicNode
-              data={t}
-              position={pos}
-              color={color}
-              onSelect={onTopic}
-            />
-          </group>
-        );
-      })}
-    </group>
-  );
-}
-/* ------------------ CLASSROOM (CHAPTER GRAPH AROUND CORE) ------------------ */
-
-function Classroom({ lesson, onBack, onTopic }) {
-  const color = lesson.color || "#4eaaff";
-  const chapters = lesson.chapters || [];
-  const radius = 6;
-
-  return (
-    <group>
-      {/* گروه دکمه بازگشت */}
-      <group position={[-8, 6, 0]} onClick={onBack}>
-        {/* اضافه کردن گوی برای دکمه بازگشت */}
-        <mesh>
-          {/*اصلی*/}
-          <sphereGeometry args={[0.8, 32, 32]} /> {/* اندازه گوی */}
-          <meshStandardMaterial
-            color="#A0A0A0" // رنگ خاکستری برای گوی
-            emissive="#707070" // رنگ نوردهی برای جلوه بیشتر
-            emissiveIntensity={0.6}
-            transparent={true} // کمی شفافیت
-            opacity={0.8} // میزان شفافیت
-          />
-        </mesh>
-        {/* متن بازگشت بالای گوی و همیشه رو به دوربین */}
-        <Billboard position={[0, 1.5, 0]}> {/* <--- تغییر در موقعیت Y برای قرار گرفتن بالاتر از گوی */}
-          <Text fontSize={0.4} color="white"> {/* <--- تنظیم اندازه فونت برای خوانایی بهتر */}
-            ← بازگشت
-          </Text>
-        </Billboard>
-      </group>
-
-      <mesh>
-        <sphereGeometry args={[1.09, 32, 32]} />
-        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.6} />
-      </mesh>
-
-      <Billboard position={[0, 3, 0]}>
-        <Text fontSize={1.0} color="white">
+        <h3
+          style={{
+            margin: 0,
+            fontSize: "1rem",
+            color: "#7dd3fc",
+            borderBottom: "1px solid #475569",
+            paddingBottom: 8
+          }}
+        >
           {lesson.title}
-        </Text>
-      </Billboard>
+        </h3>
 
-      {chapters.map((ch, i) => {
-        const angle = (i / chapters.length) * Math.PI * 2;
-        const x = Math.cos(angle) * radius;
-        const z = Math.sin(angle) * radius;
-        const pos = [x, 0, z];
+        <button
+          onClick={handleResetView}
+          style={{
+            marginTop: 10,
+            padding: "10px",
+            borderRadius: "8px",
+            border: "none",
+            background: "#0ea5e9",
+            color: "white",
+            cursor: "pointer",
+            fontWeight: "bold",
+            width: "100%"
+          }}
+        >
+          🔍 بازگشت به نمای کلی
+        </button>
 
-        return (
-          <group key={ch.id}>
-            <DataStream start={[0, 0, 0]} end={pos} color={color} />
+        <button
+          onClick={onBack}
+          style={{
+            marginTop: 10,
+            padding: "10px",
+            borderRadius: "8px",
+            border: "none",
+            background: "#ef4444",
+            color: "white",
+            cursor: "pointer",
+            width: "100%"
+          }}
+        >
+          خروج
+        </button>
 
-            <ChapterNode
-              chapter={ch}
-              position={pos}
-              color={color}
-              onTopic={onTopic}
-            />
-          </group>
-        );
-      })}
+        <div style={{ marginTop: 20 }}>
+          <span style={{ fontSize: "0.8rem", color: "#94a3b8" }}>حالت نمایش:</span>
+          <div style={{ display: "flex", gap: 5, marginTop: 5 }}>
+            {["random", "horizontal", "floors"].map((m) => (
+              <button
+                key={m}
+                onClick={() => {
+                  setMode(m);
+                  handleResetView();
+                }}
+                style={{
+                  flex: 1,
+                  padding: "6px",
+                  borderRadius: "6px",
+                  border: "none",
+                  background: mode === m ? "#0ea5e9" : "#334155",
+                  color: "white",
+                  cursor: "pointer",
+                  fontSize: "0.75rem"
+                }}
+              >
+                {m === "random" ? "پراکنده" : m === "horizontal" ? "افقی" : "طبقاتی"}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
 
-      <Stars radius={80} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
-    </group>
-  );
-}
-
-
-/* ------------------ LOBBY ------------------ */
-
-function Lobby({ onSelect }) {
-  const keys = Object.keys(LESSONS);
-  return (
-    <group>
-      <Billboard position={[0, 5, 0]}>
-        <Text fontSize={1} color="white">
-          انتخاب درس
-        </Text>
-      </Billboard>
-
-      {keys.map((k, i) => {
-        const l = LESSONS[k];
-        const x = (i - (keys.length - 1) / 2) * 5;
-
-        return (
-          <group
-            key={k}
-            position={[x, 0, 0]}
-            onClick={() => onSelect(k)}
-          >
-            <mesh>
-              <boxGeometry args={[2, 2, 2]} />
-              <meshStandardMaterial color={l.color} />
-            </mesh>
-
-            <Billboard position={[0, 2.5, 0]}>
-              <Text fontSize={0.5} color="white">
-                {l.title}
-              </Text>
-            </Billboard>
-          </group>
-        );
-      })}
-    </group>
-  );
-}
-
-/* ------------------ MAIN ------------------ */
-
-export default function LessonRoom({ lesson, onBack }) {
-  const [view, setView] = useState(VIEW.LOBBY);
-  const [topic, setTopic] = useState(null);
-  const [activeLesson, setActiveLesson] = useState(null);
-
-  return (
-    <div style={{ width: "100vw", height: "100vh" }}>
-      <Canvas camera={{ position: [0, 8, 18], fov: 50 }}>
+      {/* --- 3D Scene --- */}
+      <Canvas camera={{ position: [0, 5, 35], fov: 50 }}>
         <ambientLight intensity={0.6} />
-        <pointLight position={[10, 10, 10]} />
-        <OrbitControls />
+        <pointLight position={[10, 10, 10]} intensity={1.2} />
 
-        {view === VIEW.LOBBY && (
-          <Lobby
-            onSelect={(key) => {
-              setActiveLesson(LESSONS[key]);
-              setView(VIEW.CLASS);
-            }}
-          />
-        )}
+        <OrbitControls
+          makeDefault
+          enableDamping
+          dampingFactor={0.08}
+          // کلید اصلی حل مشکل: کنترل‌ها فقط وقتی پرواز نیست فعال هستند
+          enabled={!isFlying} 
+          // اگر کاربر شروع به تعامل کرد، پرواز را قطع کن و کنترل را به او بده
+          onStart={handleUserInteraction} 
+        />
 
-        {view === VIEW.CLASS && (
-          <Classroom
-            lesson={activeLesson}
-            onBack={() => setView(VIEW.LOBBY)}
-            onTopic={(t) => {
-              setTopic(t);
-              setView(VIEW.TOPIC);
-            }}
-          />
-        )}
+        {/* کامپوننت مدیریت دوربین با حرکت نرم */}
+        <CameraFlyTo 
+          targetPosition={targetPosition} 
+          isFlying={isFlying}
+          setIsFlying={setIsFlying}
+        />
 
-        {view === VIEW.TOPIC && (
-          <>
-            <Classroom
-              lesson={activeLesson}
-              onBack={() => setView(VIEW.LOBBY)}
-              onTopic={(t) => {
-                setTopic(t);
-                setView(VIEW.TOPIC);
-              }}
-            />
-            <TopicModal
-              topic={topic}
-              onClose={() => setView(VIEW.CLASS)}
-            />
-          </>
-        )}
+        <group>
+          {mode === "horizontal" && (
+            <ClassroomHorizontal lesson={lesson} onTopic={handleTopicClick} />
+          )}
+          {mode === "floors" && (
+            <ClassroomFloors lesson={lesson} onTopic={handleTopicClick} />
+          )}
+          {mode === "random" && (
+            <ClassroomRandom lesson={lesson} onTopic={handleTopicClick} />
+          )}
+        </group>
+
+        {/* Tooltip سه‌بعدی */}
+        <TopicTooltip 
+          topic={selectedTopic} 
+          position={selectedTopic ? targetPosition : null} 
+          onClose={handleResetView}
+        />
+
+        <Stars radius={90} depth={50} count={5000} fade />
       </Canvas>
     </div>
   );
 }
-
-/* ================= END PART 1 ================= */
-/* ================================================
-   LESSONROOM.JSX — META UNIVERSITY (OPTION A)
-   PART 2 / 4  —  (1000–2000)
-   NO EXPLANATION • PURE CODE • CLEAN • FINAL
-=================================================== */
-
-//////////////////////////////////////////////////////////////////
-// CHAPTER NODE — INTERACTIVE MAIN NODE (Option A)
-//////////////////////////////////////////////////////////////////
-
-function ChapterNodeA({ chapter, position, color, onSelectTopic }) {
-  const topics = chapter.topics || [];
-  const radius = 3;
-
-  return (
-    <group position={position}>
-      <mesh>
-        <sphereGeometry args={[1.1, 32, 32]} />
-        <meshStandardMaterial
-          color={color}
-          emissive={color}
-          emissiveIntensity={1.2}
-        />
-      </mesh>
-
-      <Billboard position={[0, 2, 0]}>
-        <Text fontSize={0.46} color="white">
-          {chapter.title}
-        </Text>
-      </Billboard>
-
-      {topics.map((t, i) => {
-        const angle = (i / topics.length) * Math.PI * 2;
-        const x = Math.cos(angle) * radius;
-        const z = Math.sin(angle) * radius;
-        const pos = [x, 0, z];
-
-        return (
-          <group key={t.id}>
-            <Line
-              points={[
-                new THREE.Vector3(0, 0, 0),
-                new THREE.Vector3(x, 0, z),
-              ]}
-              color={color}
-              transparent
-              opacity={0.4}
-            />
-
-            <TopicBubbleA
-              topic={t}
-              position={pos}
-              color={color}
-              onSelect={onSelectTopic}
-            />
-          </group>
-        );
-      })}
-    </group>
-  );
-}
-
-//////////////////////////////////////////////////////////////////
-// TOPIC BUBBLE — SMALL NODES AROUND CHAPTER
-//////////////////////////////////////////////////////////////////
-
-function TopicBubbleA({ topic, position, color, onSelect }) {
-  return (
-    <group position={position}>
-      <mesh
-        onClick={(e) => {
-          e.stopPropagation();
-          onSelect(topic);
-        }}
-      >
-        <sphereGeometry args={[0.55, 20, 20]} />
-        <meshStandardMaterial color={color} />
-      </mesh>
-
-      <Billboard position={[0, 1, 0]}>
-        <Text fontSize={0.28} color="white">
-          {topic.title}
-        </Text>
-      </Billboard>
-    </group>
-  );
-}
-
-//////////////////////////////////////////////////////////////////
-// CLASSROOM A — CHAPTER NODES AROUND CORE
-//////////////////////////////////////////////////////////////////
-
-function ClassroomA({ lesson, onBack, onTopic }) {
-  const color = lesson.color || "#4eaaff";
-  const chapters = lesson.chapters || [];
-  const radius = 11;
-
-  return (
-    <group>
-      <group
-        position={[-8, 6, 0]}
-        onClick={onBack}
-      >
-        <Text fontSize={0.6} color="white">← بازگشت</Text>
-      </group>
-
-      <mesh>
-        <sphereGeometry args={[2.8, 32, 32]} />
-        <meshStandardMaterial
-          color={color}
-          emissive={color}
-          emissiveIntensity={0.8}
-        />
-      </mesh>
-
-      <Billboard>
-        <Text fontSize={0.9} color="white">
-          {lesson.title}
-        </Text>
-      </Billboard>
-
-      {chapters.map((ch, i) => {
-        const angle = (i / chapters.length) * Math.PI * 2;
-        const x = Math.cos(angle) * radius;
-        const z = Math.sin(angle) * radius;
-        const pos = [x, 0, z];
-
-        return (
-          <group key={ch.id}>
-            <Line
-              points={[
-                new THREE.Vector3(0, 0, 0),
-                new THREE.Vector3(x, 0, z),
-              ]}
-              color={color}
-              transparent
-              opacity={0.4}
-            />
-
-            <ChapterNodeA
-              chapter={ch}
-              position={pos}
-              color={color}
-              onSelectTopic={onTopic}
-            />
-          </group>
-        );
-      })}
-
-      <Stars radius={80} depth={40} count={5000} factor={4} fade speed={1} />
-    </group>
-  );
-}
-
-//////////////////////////////////////////////////////////////////
-// TOPIC MODAL — FLOATING HTML CARD
-//////////////////////////////////////////////////////////////////
-
-function TopicModalA({ topic, onClose }) {
-  if (!topic) return null;
-  return (
-    <Html center zIndexRange={[200, 0]}>
-      <div
-        style={{
-          width: "500px",
-          maxHeight: "75vh",
-          overflowY: "auto",
-          padding: "20px",
-          borderRadius: "14px",
-          background: "rgba(0,0,0,0.75)",
-          border: "2px solid #4eaaff",
-          backdropFilter: "blur(10px)",
-          color: "white",
-          direction: "rtl",
-        }}
-      >
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <h2>{topic.title}</h2>
-          <button
-            onClick={onClose}
-            style={{
-              width: 32,
-              height: 32,
-              borderRadius: "50%",
-              border: 0,
-              background: "rgba(255,255,255,0.2)",
-              color: "white",
-              cursor: "pointer",
-            }}
-          >
-            ×
-          </button>
-        </div>
-
-        <p>{topic.content}</p>
-
-        {topic.subtopics?.map((s, i) => (
-          <div
-            key={i}
-            style={{
-              marginTop: 12,
-              padding: 10,
-              borderRight: "4px solid #4eaaff",
-              background: "rgba(255,255,255,0.12)",
-            }}
-          >
-            <strong>{s.title}</strong>
-            <p>{s.content}</p>
-          </div>
-        ))}
-      </div>
-    </Html>
-  );
-}
-
-//////////////////////////////////////////////////////////////////
-// LOBBY A — MAIN MENU INSIDE 3D SPACE
-//////////////////////////////////////////////////////////////////
-
-function LobbyA({ onSelect }) {
-  const keys = Object.keys(LESSONS_A);
-
-  return (
-    <group>
-      <Billboard position={[0, 5, 0]}>
-        <Text fontSize={1} color="white">انتخاب درس</Text>
-      </Billboard>
-
-      {keys.map((k, i) => {
-        const L = LESSONS_A[k];
-        const x = (i - (keys.length - 1) / 2) * 5;
-
-        return (
-          <group
-            key={k}
-            position={[x, 0, 0]}
-            onClick={() => onSelect(k)}
-          >
-            <mesh>
-              <boxGeometry args={[2, 2, 2]} />
-              <meshStandardMaterial color={L.color} />
-            </mesh>
-
-            <Billboard position={[0, 2.6, 0]}>
-              <Text fontSize={0.5} color="white">{L.title}</Text>
-            </Billboard>
-          </group>
-        );
-      })}
-    </group>
-  );
-}
-
-//////////////////////////////////////////////////////////////////
-// DATA REGISTRY — NORMALIZED COURSE DATA (ARRAY→OBJECT)
-//////////////////////////////////////////////////////////////////
-
-function normalize(raw, name, color) {
-  if (Array.isArray(raw)) {
-    return {
-      title: name,
-      color,
-      chapters: raw.map((c, i) => ({
-        id: "ch" + i,
-        title: c.section || "بدون عنوان",
-        topics: (c.topics || []).map((t, j) => ({
-          id: `t_${i}_${j}`,
-          title: t.title,
-          content: t.content,
-          subtopics: t.subtopics || [],
-        })),
-      })),
-    };
-  }
-  return raw;
-}
-
-const LESSONS_A = {
-  python: normalize(python, "Python", "#4080ff"),
-  networks: normalize(networks, "Networks", "#ff8844"),
-  algorithms: normalize(algorithms, "Algorithms", "#33ffaa"),
-  iot: normalize(iot, "IoT", "#aa66ff"),
-  cloud: normalize(cloud, "Cloud", "#44eecc"),
-};
-
-//////////////////////////////////////////////////////////////////
-// END OF PART 2 — READY FOR PART 3
-//////////////////////////////////////////////////////////////////
-/* ================================================
-   LESSONROOM.JSX — META UNIVERSITY (OPTION A)
-   PART 3 / 4  —  (2000–3000)
-   NO EXPLANATION • PURE CODE • CLEAN • FINAL
-=================================================== */
-
