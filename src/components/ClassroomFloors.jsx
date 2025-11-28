@@ -1,5 +1,5 @@
-import React, { useMemo } from "react";
-import { Billboard, Text, Stars } from "@react-three/drei";
+import React, { useMemo, useState } from "react";
+import { Billboard, Text } from "@react-three/drei";
 import * as THREE from "three";
 import FiberLink from "./FiberLink";
 
@@ -8,11 +8,14 @@ export default function ClassroomFloors({ lesson, onTopic }) {
   const chapters = lesson.chapters || [];
   const gapY = 7;
 
+  const [hoveredTopic, setHoveredTopic] = useState(null);
+  const [hoveredChapter, setHoveredChapter] = useState(null);
+  const [clickedTopic, setClickedTopic] = useState(null);
+
   const chapterPositions = useMemo(() => {
     return chapters.map((_, i) => {
       const y = i * gapY;
-      // کمی لرزش تصادفی در X و Z
-      const jitterX = (Math.random() - 0.5) * 2; 
+      const jitterX = (Math.random() - 0.5) * 2;
       const jitterZ = (Math.random() - 0.5) * 2;
       return new THREE.Vector3(jitterX, y, jitterZ);
     });
@@ -21,68 +24,91 @@ export default function ClassroomFloors({ lesson, onTopic }) {
   const totalHeight = chapters.length * gapY;
 
   return (
-    <group position={[0, -totalHeight / 2.5, 0]}>
-
+    <group>
       {chapters.map((ch, i) => {
         const pos = chapterPositions[i];
         const nextPos = chapterPositions[i + 1];
 
         return (
           <group key={ch.id}>
-
-            {/* اتصال عمودی به طبقه بالا */}
             {nextPos && (
               <FiberLink
                 start={[pos.x, pos.y, pos.z]}
                 end={[nextPos.x, nextPos.y, nextPos.z]}
                 color={color}
-                height={0} // برای اتصال عمودی، قوس 0 بهتر است (خط صاف‌تر) یا قوس کم
+                height={0.3}
                 speed={1}
               />
             )}
 
             <group position={pos}>
               <mesh>
-                <sphereGeometry args={[0.9, 32, 32]} />
-                <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.7} />
+                <sphereGeometry args={[hoveredChapter === i ? 1.1 : 0.9, 32, 32]} />
+                <meshStandardMaterial
+                  color={color}
+                  emissive={color}
+                  emissiveIntensity={hoveredChapter === i ? 1 : 0.6}
+                />
               </mesh>
+
               <Billboard position={[0, 2, 0]}>
-                <Text fontSize={0.6} color="white">{ch.title}</Text>
+                <Text fontSize={0.65} color="white">
+                  {ch.title}
+                </Text>
               </Billboard>
 
-              {/* تاپیک‌ها دور فصل */}
+              {/* TOPICS */}
               {ch.topics.map((t, idx) => {
                 const angle = (idx / ch.topics.length) * Math.PI * 2;
-                const radius = 3.5;
-                const tx = Math.cos(angle) * radius;
-                const tz = Math.sin(angle) * radius;
-                const topicRelPos = [tx, 0, tz];
-                
-                const gX = pos.x + tx;
-                const gY = pos.y;
-                const gZ = pos.z + tz;
+                const r = 3.5;
+                const tx = Math.cos(angle) * r;
+                const tz = Math.sin(angle) * r;
+
+                const gx = pos.x + tx;
+                const gy = pos.y;
+                const gz = pos.z + tz;
+
+                const isHover = hoveredTopic === t.id;
+                const isClicked = clickedTopic === t.id;
 
                 return (
                   <group key={t.id}>
-                    {/* اتصال افقی فصل به تاپیک */}
                     <FiberLink
                       start={[0, 0, 0]}
-                      end={topicRelPos}
+                      end={[tx, 0, tz]}
                       color={color}
-                      height={0.5}
+                      height={0.4}
                       speed={0.5}
                     />
 
-                    <group position={topicRelPos}>
-                      <mesh onClick={(e) => {
+                    <group position={[tx, 0, tz]}>
+                      <mesh
+                        onPointerOver={() => setHoveredTopic(t.id)}
+                        onPointerOut={() => setHoveredTopic(null)}
+                        onClick={(e) => {
                           e.stopPropagation();
-                          onTopic(t, [gX, gY, gZ]);
-                      }}>
-                        <sphereGeometry args={[0.35, 24, 24]} />
-                        <meshStandardMaterial color={color} emissiveIntensity={0.2} />
+                          setClickedTopic(t.id);
+                          onTopic(t, [gx, gy, gz]);
+                        }}
+                      >
+                        <sphereGeometry
+                          args={[
+                            isHover || isClicked ? 0.55 : 0.38,
+                            24,
+                            24
+                          ]}
+                        />
+                        <meshStandardMaterial
+                          color={color}
+                          emissive={color}
+                          emissiveIntensity={isHover || isClicked ? 1 : 0.3}
+                        />
                       </mesh>
-                      <Billboard position={[0, 0.8, 0]}>
-                        <Text fontSize={0.3} color="white">{t.title}</Text>
+
+                      <Billboard position={[0, isHover || isClicked ? 1.1 : 0.8, 0]}>
+                        <Text fontSize={isHover || isClicked ? 0.42 : 0.32} color="white">
+                          {t.title}
+                        </Text>
                       </Billboard>
                     </group>
                   </group>

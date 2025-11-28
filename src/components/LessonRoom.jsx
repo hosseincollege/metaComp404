@@ -1,48 +1,36 @@
-import React, { useState, useRef, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls, Stars, Html } from "@react-three/drei";
 import * as THREE from "three";
 
-// کامپوننت‌های نمایش سه‌بعدی
-import ClassroomHorizontal from "./ClassroomHorizontal"; 
+import ClassroomHorizontal from "./ClassroomHorizontal";
 import ClassroomFloors from "./ClassroomFloors";
 import ClassroomRandom from "./ClassroomRandom";
 
-/* ========================================================
-   1) Camera Fly-To (Smooth cinematic movement) - FIX FOR LOCK
-======================================================== */
-// هدف: حرکت نرم دوربین، و رها کردن کنترل‌ها پس از رسیدن
+/* ---------------- Camera Smooth Movement ---------------- */
 function CameraFlyTo({ targetPosition, isFlying, setIsFlying }) {
   const { camera, controls } = useThree();
-  // استفاده از useMemo برای جلوگیری از ایجاد مجدد اشیاء در هر رندر
-  const desiredPos = useMemo(() => new THREE.Vector3(0, 5, 35), []);
+  const desiredPos = useMemo(() => new THREE.Vector3(0, 6, 40), []);
   const desiredTarget = useMemo(() => new THREE.Vector3(0, 0, 0), []);
 
   useFrame((_, delta) => {
-    // فقط در صورتی که در حالت پرواز باشیم، موقعیت‌ها را به‌روز می‌کنیم
     if (!isFlying || !controls) return;
 
-    // هدف نگاه جدید
     desiredTarget.set(targetPosition[0], targetPosition[1], targetPosition[2]);
 
-    // موقعیت جدید دوربین
     if (targetPosition[0] === 0 && targetPosition[1] === 0 && targetPosition[2] === 0) {
-        // نمای کلی
-        desiredPos.set(0, 5, 35);
+      desiredPos.set(0, 8, 40);
     } else {
-        // موقعیت نزدیک به گوی
-        desiredPos.set(targetPosition[0], targetPosition[1] + 1.5, targetPosition[2] + 4);
+      desiredPos.set(targetPosition[0], targetPosition[1] + 2, targetPosition[2] + 5);
     }
-    
-    // حرکت نرم (Lerp)
-    const speed = delta * 3; 
-    camera.position.lerp(desiredPos, speed); 
-    controls.target.lerp(desiredTarget, speed); 
+
+    const speed = delta * 3;
+    camera.position.lerp(desiredPos, speed);
+    controls.target.lerp(desiredTarget, speed);
 
     controls.update();
 
-    // وقتی رسید، کنترل کامل به کاربر داده میشه (این خط جلوی قفل شدن را می‌گیرد)
-    if (camera.position.distanceTo(desiredPos) < 0.15) {
+    if (camera.position.distanceTo(desiredPos) < 0.2) {
       setIsFlying(false);
     }
   });
@@ -50,76 +38,130 @@ function CameraFlyTo({ targetPosition, isFlying, setIsFlying }) {
   return null;
 }
 
-/* ========================================================
-   2) Tooltip 3D کنار گوی انتخاب‌شده (تنظیم موقعیت و دکمه بستن)
-======================================================== */
+/* ---------------- Tooltip Beside Node ---------------- */
 function TopicTooltip({ topic, position, onClose }) {
   if (!topic || !position) return null;
 
+  const detectDir = (text) => {
+    const persianRegex = /[\u0600-\u06FF]/;
+    return persianRegex.test(text) ? "rtl" : "ltr";
+  };
+
   return (
     <Html
-      // موقعیت Tooltip بسیار نزدیک‌تر به گوی
-      position={[position[0] + 0.8, position[1] + 0.5, position[2]]} 
-      center
+      transform={false}
+      distanceFactor={1}
+      position={[
+        position[0] + 2.2, 
+        position[1] + 0.65,
+        position[2]
+      ]}
       style={{
-        background: "rgba(15,23,42,0.85)",
-        padding: "14px",
-        borderRadius: "12px",
+        background: "rgba(15,15,20,0.92)",
+        backdropFilter: "blur(14px)",
+        padding: "40px",                // 10× بزرگتر از قبل
+        borderRadius: "26px",
+        width: "1200px",                // قبلاً 420px → الان 10× بزرگ
         color: "white",
-        width: "220px",
         pointerEvents: "auto",
-        border: "1px solid rgba(255,255,255,0.2)",
-        boxShadow: "0 6px 25px rgba(0,0,0,0.45)"
+        border: "2px solid rgba(255,255,255,0.28)",
+        boxShadow: "0 25px 60px rgba(0,0,0,0.65)",
+        fontFamily: "IRANSans, sans-serif",
       }}
     >
-      {/* دکمه بستن (X) */}
+
+      {/* دکمه بستن - خیلی بزرگ‌تر */}
       <button
         onClick={onClose}
         style={{
           position: "absolute",
-          top: "5px",
-          right: "5px", 
-          width: "24px",
-          height: "24px",
+          top: "12px",
+          left: "12px",
+          width: "60px",
+          height: "60px",
           borderRadius: "50%",
-          background: "rgba(255,255,255,0.1)",
+          background: "rgba(255,255,255,0.15)",
           border: "none",
           color: "white",
           cursor: "pointer",
-          fontSize: "16px",
-          lineHeight: "14px",
+          fontSize: "40px",
           fontWeight: "bold",
-          padding: 0,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          zIndex: 100
         }}
       >
         ×
       </button>
-      
-      <h4 style={{ margin: 0, color: "#38bdf8", fontSize: "1rem" }}>{topic.title}</h4>
 
+      {/* عنوان */}
+      <h4
+        style={{
+          margin: "0 0 25px 0",
+          color: "#38bdf8",
+          fontSize: "4.2rem",           // قبلاً 1.8rem → الان 10×
+          fontWeight: "900",
+          lineHeight: 1.3,
+          direction: detectDir(topic.title),
+          textAlign: detectDir(topic.title) === "rtl" ? "right" : "left",
+        }}
+      >
+        {topic.title}
+      </h4>
+
+      {/* متن اصلی */}
       {topic.content && (
-        <p style={{ marginTop: 6, fontSize: "0.85rem", lineHeight: 1.6 }}>
+        <p
+          style={{
+            marginTop: 12,
+            fontSize: "2.8rem",          // خیلی درشت
+            lineHeight: 2.4,
+            color: "#e2e8f0",
+            fontWeight: "350",
+            direction: detectDir(topic.content),
+            textAlign: detectDir(topic.content) === "rtl" ? "right" : "left",
+          }}
+        >
           {topic.content}
         </p>
       )}
 
+      {/* زیرموضوع‌ها */}
       {topic.subtopics &&
         topic.subtopics.map((s, i) => (
           <div
             key={i}
             style={{
-              marginTop: 8,
-              padding: 6,
-              borderRadius: 6,
-              background: "rgba(255,255,255,0.06)"
+              marginTop: 30,
+              padding: "22px 26px",
+              borderRadius: 16,
+              background: "rgba(255,255,255,0.07)",
+              border: "1px solid rgba(255,255,255,0.15)",
             }}
           >
-            <strong style={{ color: "#fbbf24" }}>• {s.title}</strong>
-            <p style={{ margin: "4px 0", fontSize: "0.8rem", color: "#cbd5e1" }}>
+            <strong
+              style={{
+                color: "#fbbf24",
+                fontSize: "2.5rem",
+                display: "block",
+                marginBottom: "12px",
+                direction: detectDir(s.title),
+                textAlign: detectDir(s.title) === "rtl" ? "right" : "left",
+              }}
+            >
+              • {s.title}
+            </strong>
+
+            <p
+              style={{
+                margin: 0,
+                fontSize: "2.2rem",
+                color: "#cbd5e1",
+                lineHeight: 2.1,
+                direction: detectDir(s.content),
+                textAlign: detectDir(s.content) === "rtl" ? "right" : "left",
+              }}
+            >
               {s.content}
             </p>
           </div>
@@ -128,84 +170,86 @@ function TopicTooltip({ topic, position, onClose }) {
   );
 }
 
-/* ========================================================
-   3) Main Scene Component
-======================================================== */
+
 export default function LessonRoom({ lesson, onBack }) {
   const [selectedTopic, setSelectedTopic] = useState(null);
-  const [targetPosition, setTargetPosition] = useState([0, 0, 0]); 
-  const [mode, setMode] = useState("random"); 
-  const [isFlying, setIsFlying] = useState(false); // ردیابی وضعیت پرواز
+  const [targetPosition, setTargetPosition] = useState([0, 0, 0]);
+  const [mode, setMode] = useState("random");
+  const [isFlying, setIsFlying] = useState(false);
 
-  /* کلیک روی گوی */
   const handleTopicClick = (topicData, positionArray) => {
     setSelectedTopic(topicData);
-    setTargetPosition(positionArray); 
-    setIsFlying(true); // شروع پرواز
+    setTargetPosition(positionArray);
+    setIsFlying(true);
   };
 
-  /* بازگشت به نمای کلی یا بستن Tooltip */
   const handleResetView = () => {
     setSelectedTopic(null);
-    setTargetPosition([0, 0, 0]); 
-    setIsFlying(true); // شروع پرواز برای بازگشت
+    setTargetPosition([0, 0, 0]);
+    setIsFlying(true);
   };
-  
-  /* فعال کردن مجدد کنترل‌ها توسط تعامل کاربر */
+
+  // بستن Tooltip بدون حرکت دوربین
+  const handleCloseTooltip = () => {
+    setSelectedTopic(null);
+    // هیچ پروازی اینجا نیست، هیچ تغییری در targetPosition
+  };
+
+
   const handleUserInteraction = () => {
-    if (isFlying) {
-      setIsFlying(false);
-    }
+    if (isFlying) setIsFlying(false);
   };
 
   if (!lesson)
     return <div style={{ color: "white", padding: 50 }}>در حال بارگذاری...</div>;
 
-  /* ========================================================
-     UI + Canvas Scene
-  ======================================================== */
   return (
-    <div style={{ width: "100vw", height: "100vh", background: "#020617", position: "relative" }}>
+    <div style={{
+      width: "100vw",
+      height: "100vh",
+      background: "#000000",
+      position: "relative"
+    }}>
 
-      {/* --- UI Panel --- */}
+      {/* UI PANEL */}
       <div
         style={{
           position: "absolute",
-          right: 20,
-          top: 20,
-          width: "240px",
+          right: 25,
+          top: 25,
+          width: "270px",
           zIndex: 30,
-          background: "rgba(30,41,59,0.8)",
-          backdropFilter: "blur(8px)",
-          borderRadius: "12px",
-          padding: "15px",
+          background: "rgba(15,15,15,0.85)",
+          backdropFilter: "blur(10px)",
+          borderRadius: "14px",
+          padding: "18px",
           border: "1px solid rgba(255,255,255,0.1)",
           color: "white"
         }}
       >
-        <h3
-          style={{
-            margin: 0,
-            fontSize: "1rem",
-            color: "#7dd3fc",
-            borderBottom: "1px solid #475569",
-            paddingBottom: 8
-          }}
-        >
+        <h3 style={{
+          margin: 0,
+          fontSize: "1.3rem",
+          fontWeight: "bold",
+          color: "#7dd3fc",
+          borderBottom: "1px solid #333",
+          paddingBottom: 8
+        }}>
           {lesson.title}
         </h3>
 
         <button
           onClick={handleResetView}
           style={{
-            marginTop: 10,
-            padding: "10px",
-            borderRadius: "8px",
+            marginTop: 14,
+            padding: "12px",
+            borderRadius: "10px",
             border: "none",
             background: "#0ea5e9",
             color: "white",
             cursor: "pointer",
             fontWeight: "bold",
+            fontSize: "0.95rem",
             width: "100%"
           }}
         >
@@ -216,21 +260,22 @@ export default function LessonRoom({ lesson, onBack }) {
           onClick={onBack}
           style={{
             marginTop: 10,
-            padding: "10px",
-            borderRadius: "8px",
+            padding: "12px",
+            borderRadius: "10px",
             border: "none",
             background: "#ef4444",
             color: "white",
             cursor: "pointer",
+            fontSize: "0.95rem",
             width: "100%"
           }}
         >
           خروج
         </button>
 
-        <div style={{ marginTop: 20 }}>
-          <span style={{ fontSize: "0.8rem", color: "#94a3b8" }}>حالت نمایش:</span>
-          <div style={{ display: "flex", gap: 5, marginTop: 5 }}>
+        <div style={{ marginTop: 22 }}>
+          <span style={{ fontSize: "0.9rem", color: "#cbd5e1" }}>حالت نمایش:</span>
+          <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
             {["random", "horizontal", "floors"].map((m) => (
               <button
                 key={m}
@@ -240,13 +285,14 @@ export default function LessonRoom({ lesson, onBack }) {
                 }}
                 style={{
                   flex: 1,
-                  padding: "6px",
-                  borderRadius: "6px",
+                  padding: "10px",
+                  borderRadius: "8px",
                   border: "none",
-                  background: mode === m ? "#0ea5e9" : "#334155",
+                  background: mode === m ? "#0ea5e9" : "#333",
                   color: "white",
                   cursor: "pointer",
-                  fontSize: "0.75rem"
+                  fontSize: "0.85rem",
+                  fontWeight: "bold"
                 }}
               >
                 {m === "random" ? "پراکنده" : m === "horizontal" ? "افقی" : "طبقاتی"}
@@ -256,8 +302,7 @@ export default function LessonRoom({ lesson, onBack }) {
         </div>
       </div>
 
-      {/* --- 3D Scene --- */}
-      <Canvas camera={{ position: [0, 5, 35], fov: 50 }}>
+      <Canvas camera={{ position: [0, 6, 40], fov: 50 }}>
         <ambientLight intensity={0.6} />
         <pointLight position={[10, 10, 10]} intensity={1.2} />
 
@@ -265,18 +310,11 @@ export default function LessonRoom({ lesson, onBack }) {
           makeDefault
           enableDamping
           dampingFactor={0.08}
-          // کلید اصلی حل مشکل: کنترل‌ها فقط وقتی پرواز نیست فعال هستند
-          enabled={!isFlying} 
-          // اگر کاربر شروع به تعامل کرد، پرواز را قطع کن و کنترل را به او بده
-          onStart={handleUserInteraction} 
+          enabled={!isFlying}
+          onStart={handleUserInteraction}
         />
 
-        {/* کامپوننت مدیریت دوربین با حرکت نرم */}
-        <CameraFlyTo 
-          targetPosition={targetPosition} 
-          isFlying={isFlying}
-          setIsFlying={setIsFlying}
-        />
+        <CameraFlyTo targetPosition={targetPosition} isFlying={isFlying} setIsFlying={setIsFlying} />
 
         <group>
           {mode === "horizontal" && (
@@ -290,14 +328,9 @@ export default function LessonRoom({ lesson, onBack }) {
           )}
         </group>
 
-        {/* Tooltip سه‌بعدی */}
-        <TopicTooltip 
-          topic={selectedTopic} 
-          position={selectedTopic ? targetPosition : null} 
-          onClose={handleResetView}
-        />
+        <TopicTooltip topic={selectedTopic} position={selectedTopic ? targetPosition : null} onClose={handleCloseTooltip} />
 
-        <Stars radius={90} depth={50} count={5000} fade />
+        <Stars radius={80} depth={40} count={4500} fade />
       </Canvas>
     </div>
   );
