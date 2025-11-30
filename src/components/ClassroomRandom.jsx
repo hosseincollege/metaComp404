@@ -6,24 +6,22 @@ import FiberLink from "./FiberLink";
 export default function ClassroomRandom({ lesson, onTopic }) {
   const color = lesson.color || "#4eaaff";
   const chapters = lesson.chapters || [];
-  const gapY = 8;
+
+  const gapY = 3;
 
   const [hoveredTopic, setHoveredTopic] = useState(null);
-  const [hoveredChapter, setHoveredChapter] = useState(null);
   const [clickedTopic, setClickedTopic] = useState(null);
 
   const chapterPositions = useMemo(() => {
     return chapters.map((_, i) => {
       const y = i * gapY;
       const angle = i * 2.1;
-      const radius = 7 + Math.random() * 4;
+      const radius = 6 + Math.random() * 3;
       const x = Math.cos(angle) * radius;
       const z = Math.sin(angle) * radius;
       return new THREE.Vector3(x, y, z);
     });
   }, [chapters]);
-
-  const totalHeight = chapters.length * gapY;
 
   return (
     <group>
@@ -38,23 +36,30 @@ export default function ClassroomRandom({ lesson, onTopic }) {
                 start={[pos.x, pos.y, pos.z]}
                 end={[nextPos.x, nextPos.y, nextPos.z]}
                 color={color}
-                height={2}
+                height={1.4}
                 speed={1}
               />
             )}
 
+            {/* گوی فصل — کوچک و بدون واکنش */}
             <group position={pos}>
               <mesh>
-                <sphereGeometry args={[hoveredChapter === i ? 1.25 : 1, 32, 32]} />
+                <sphereGeometry args={[0.25, 24, 24]} />
                 <meshStandardMaterial
                   color={color}
                   emissive={color}
-                  emissiveIntensity={hoveredChapter === i ? 1.1 : 0.6}
+                  emissiveIntensity={0.35}
                 />
               </mesh>
 
-              <Billboard position={[0, 2.2, 0]}>
-                <Text fontSize={0.7} color="white">
+              {/* عنوان فصل، دو برابر بالاتر */}
+              <Billboard position={[0, 2.6, 0]}>
+                <Text
+                  fontSize={0.52}
+                  color="white"
+                  outlineColor="black"
+                  outlineWidth={0.018}
+                >
                   {ch.title}
                 </Text>
               </Billboard>
@@ -62,7 +67,7 @@ export default function ClassroomRandom({ lesson, onTopic }) {
               {/* TOPICS */}
               {ch.topics.map((t, idx) => {
                 const angle = (idx / ch.topics.length) * Math.PI * 2;
-                const r = 3.5;
+                const r = 3.3;
                 const tx = Math.cos(angle) * r;
                 const tz = Math.sin(angle) * r;
                 const gx = pos.x + tx;
@@ -78,7 +83,7 @@ export default function ClassroomRandom({ lesson, onTopic }) {
                       start={[0, 0, 0]}
                       end={[tx, 0, tz]}
                       color={color}
-                      height={0.6}
+                      height={0.5}
                       speed={0.5}
                     />
 
@@ -94,20 +99,25 @@ export default function ClassroomRandom({ lesson, onTopic }) {
                       >
                         <sphereGeometry
                           args={[
-                            isHover || isClicked ? 0.65 : 0.45,
-                            24,
-                            24
+                            isHover || isClicked ? 0.28 : 0.22,
+                            20,
+                            20
                           ]}
                         />
                         <meshStandardMaterial
                           color={color}
                           emissive={color}
-                          emissiveIntensity={isHover || isClicked ? 1 : 0.4}
+                          emissiveIntensity={isHover || isClicked ? 0.9 : 0.25}
                         />
                       </mesh>
 
-                      <Billboard position={[0, isHover || isClicked ? 1.2 : 0.9, 0]}>
-                        <Text fontSize={isHover || isClicked ? 0.45 : 0.35} color="#eee">
+                      <Billboard position={[0, isHover || isClicked ? 0.75 : 0.6, 0]}>
+                        <Text
+                          fontSize={isHover || isClicked ? 0.36 : 0.30}
+                          color="white"
+                          outlineColor="black"
+                          outlineWidth={0.018}
+                        >
                           {t.title}
                         </Text>
                       </Billboard>

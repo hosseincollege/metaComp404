@@ -1,23 +1,25 @@
 import React, { useState } from "react";
 import LessonRoom from "./components/LessonRoom";
 
-// --- وارد کردن فایل‌های دیتا (مسیرها را طبق پروژه خود چک کنید) ---
 import python from "./lessons/python";
 import networks from "./lessons/networks";
 import algorithms from "./lessons/algorithms";
 import iot from "./lessons/iot";
 import cloud from "./lessons/cloud";
+import circuits from "./lessons/circuits";
 
-// --- تابع نرمال‌سازی دیتا (همان تابعی که قبلا در LessonRoom بود) ---
 function normalizeLesson(raw, name) {
   if (Array.isArray(raw)) {
     return {
       title: name,
-      // رنگ‌ها را اینجا می‌توانیم اختصاصی کنیم
-      color: name === "Python" ? "#306998" : 
-             name === "Networks" ? "#ff8844" :
-             name === "Algorithms" ? "#00cc66" :
-             name === "IoT" ? "#aa44ff" : "#00aaff",
+      color:
+        name === "Python" ? "#306998" :
+        name === "Networks" ? "#ff8844" :
+        name === "Algorithms" ? "#00cc66" :
+        name === "IoT" ? "#aa44ff" :
+        name === "Cloud" ? "#00aaff" :
+        name === "Electrical Circuits" ? "#ffcc00" :
+        "#ffffff",
       chapters: raw.map((c, i) => ({
         id: "ch" + i,
         title: c.section || "Untitled",
@@ -33,46 +35,47 @@ function normalizeLesson(raw, name) {
   return raw;
 }
 
-// --- لیست نهایی درس‌ها ---
 const LESSONS = {
   python: normalizeLesson(python, "Python"),
   networks: normalizeLesson(networks, "Networks"),
   algorithms: normalizeLesson(algorithms, "Algorithms"),
   iot: normalizeLesson(iot, "IoT"),
   cloud: normalizeLesson(cloud, "Cloud"),
+  circuits: normalizeLesson(circuits, "Electrical Circuits"),
 };
 
 export default function App() {
-  // استیت: کدام درس الان فعال است؟ (اگر null باشد یعنی در منو هستیم)
   const [activeLesson, setActiveLesson] = useState(null);
 
-  // اگر درسی انتخاب شده باشد، کامپوننت سه بعدی را نشان بده
   if (activeLesson) {
     return (
-      <LessonRoom 
-        lesson={activeLesson} 
-        onBack={() => setActiveLesson(null)} 
+      <LessonRoom
+        lesson={activeLesson}
+        onBack={() => setActiveLesson(null)}
       />
     );
   }
 
-  // اگر درسی انتخاب نشده، منوی انتخاب (Lobby) را نشان بده
-  // (اینجا از HTML/CSS استفاده می‌کنیم که تمیزتر و سبک‌تر از سه بعدی برای منو است)
   return (
     <div style={styles.container}>
       <h1 style={styles.header}>دانشگاه متاورس</h1>
-      <p style={styles.subHeader}>لطفاً یک درس را برای ورود انتخاب کنید</p>
-      
+      <p style={styles.subHeader}>یک درس را انتخاب کنید</p>
+
       <div style={styles.grid}>
         {Object.keys(LESSONS).map((key) => {
           const lesson = LESSONS[key];
           return (
-            <div 
-              key={key} 
-              style={{...styles.card, borderColor: lesson.color}}
+            <div
+              key={key}
+              style={{ ...styles.card, borderColor: lesson.color }}
               onClick={() => setActiveLesson(lesson)}
             >
-              <div style={{...styles.icon, backgroundColor: lesson.color}}>
+              <div
+                style={{
+                  ...styles.icon,
+                  backgroundColor: lesson.color,
+                }}
+              >
                 {lesson.title.substring(0, 2).toUpperCase()}
               </div>
               <h3 style={styles.cardTitle}>{lesson.title}</h3>
@@ -84,7 +87,6 @@ export default function App() {
   );
 }
 
-// --- استایل‌های ساده درون خطی برای زیبایی منو ---
 const styles = {
   container: {
     width: "100vw",
@@ -93,58 +95,66 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center",
-    fontFamily: "sans-serif",
+    paddingTop: "20px",
+    overflow: "hidden", // جلوگیری از اسکرول
     color: "white",
     direction: "rtl",
+    fontFamily: "sans-serif",
   },
+
   header: {
-    fontSize: "3rem",
-    marginBottom: "1rem",
+    fontSize: "2.2rem",
+    marginBottom: "4px",
     background: "linear-gradient(to right, #4eaaff, #a355ff)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
   },
+
   subHeader: {
-    fontSize: "1.2rem",
-    color: "#94a3b8",
-    marginBottom: "3rem",
+    fontSize: "1rem",
+    marginBottom: "14px",
+    color: "#b6c0d1",
   },
+
   grid: {
-    display: "flex",
-    gap: "20px",
-    flexWrap: "wrap",
+    display: "grid",
+    gridTemplateColumns: "repeat(3, 140px)", // کوچکتر
+    gridTemplateRows: "repeat(2, 160px)",
+    gap: "14px 18px",
     justifyContent: "center",
-    maxWidth: "1000px",
+    alignItems: "center",
+    marginTop: "10px",
   },
+
   card: {
-    width: "180px",
-    height: "200px",
-    backgroundColor: "rgba(30, 41, 59, 0.8)",
+    width: "140px",
+    height: "160px",
+    background: "rgba(30, 41, 59, 0.8)",
+    borderRadius: "14px",
     border: "2px solid #334155",
-    borderRadius: "16px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
     cursor: "pointer",
-    transition: "all 0.3s ease",
-    boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
+    transition: "0.25s",
   },
-  cardTitle: {
-    marginTop: "15px",
-    fontSize: "1.2rem",
-  },
+
   icon: {
-    width: "60px",
-    height: "60px",
+    width: "42px",
+    height: "42px",
     borderRadius: "50%",
+    color: "white",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    fontSize: "1.5rem",
+    fontSize: "1.2rem",
     fontWeight: "bold",
-    color: "white",
-    boxShadow: "0 0 15px rgba(0,0,0,0.2)",
+    boxShadow: "0 0 12px rgba(255,255,255,0.2)",
+  },
+
+  cardTitle: {
+    marginTop: "10px",
+    fontSize: "0.95rem",
   },
 };

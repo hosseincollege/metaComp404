@@ -39,9 +39,10 @@ export default function FiberLink({ start, end, color = "#4eaaff", height = 2, s
         points={points}
         color={color}
         transparent
-        opacity={0.3} // شفافیت کابل ثابت
-        lineWidth={1}
+        opacity={0.55}   // از 0.3 → 0.55
+        lineWidth={1.6}  // از 1 → 1.6
       />
+
 
       {/* ب) نقطه نورانی متحرک (پالس نوری) */}
       <mesh ref={dotRef}>

@@ -2,13 +2,12 @@ import React, { useMemo, useState } from "react";
 import { Billboard, Text } from "@react-three/drei";
 import FiberLink from "./FiberLink";
 
-export default function ClassroomHorizontal({ lesson, onTopic, hoverEffect = true }) {
+export default function ClassroomHorizontal({ lesson, onTopic }) {
   const color = lesson.color || "#4eaaff";
   const chapters = lesson.chapters || [];
   const radius = 12;
 
   const [hoveredTopic, setHoveredTopic] = useState(null);
-  const [hoveredChapter, setHoveredChapter] = useState(null);
 
   const chapterPositions = useMemo(() => {
     return chapters.map((_, i) => {
@@ -21,12 +20,19 @@ export default function ClassroomHorizontal({ lesson, onTopic, hoverEffect = tru
 
   return (
     <group>
+      {/* مرکز بزرگ درس */}
       <mesh>
-        <sphereGeometry args={[1.8, 32, 32]} />
-        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.8} />
+        <sphereGeometry args={[1.2, 32, 32]} />
+        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.7} />
       </mesh>
-      <Billboard position={[0, 3.2, 0]}>
-        <Text fontSize={1.1} color="white">
+
+      <Billboard position={[0, 2.8, 0]}>
+        <Text
+          fontSize={1}
+          color="white"
+          outlineColor="black"
+          outlineWidth={0.03}
+        >
           {lesson.title}
         </Text>
       </Billboard>
@@ -36,39 +42,46 @@ export default function ClassroomHorizontal({ lesson, onTopic, hoverEffect = tru
 
         return (
           <group key={ch.id}>
-
             <FiberLink
               start={[0, 0, 0]}
               end={pos}
               color={color}
-              height={3.5}
+              height={2.8}
               speed={0.8}
             />
 
             <group position={pos}>
+              {/* گوی فصل — کوچک و بدون واکنش */}
               <mesh>
-                <sphereGeometry args={[hoveredChapter === i ? 1.2 : 0.9, 32, 32]} />
+                <sphereGeometry args={[0.25, 24, 24]} />
                 <meshStandardMaterial
                   color={color}
                   emissive={color}
-                  emissiveIntensity={hoveredChapter === i ? 0.9 : 0.5}
+                  emissiveIntensity={0.35}
                 />
               </mesh>
 
-              <Billboard position={[0, 2.2, 0]}>
-                <Text fontSize={0.55} color="white">
+              <Billboard position={[0, 2.6, 0]}>
+                <Text
+                  fontSize={0.52}
+                  color="white"
+                  outlineColor="black"
+                  outlineWidth={0.018}
+                >
                   {ch.title}
                 </Text>
               </Billboard>
 
+              {/* TOPICS */}
               {ch.topics.map((t, idx) => {
                 const ang = (idx / ch.topics.length) * Math.PI * 2;
-                const tx = Math.cos(ang) * 3.4;
-                const tz = Math.sin(ang) * 3.4;
-
+                const tx = Math.cos(ang) * 3.3;
+                const tz = Math.sin(ang) * 3.3;
                 const gx = pos[0] + tx;
                 const gy = pos[1];
                 const gz = pos[2] + tz;
+
+                const isHover = hoveredTopic === t.id;
 
                 return (
                   <group key={t.id}>
@@ -82,23 +95,34 @@ export default function ClassroomHorizontal({ lesson, onTopic, hoverEffect = tru
 
                     <group position={[tx, 0, tz]}>
                       <mesh
-                        onPointerOver={() => hoverEffect && setHoveredTopic(t.id)}
+                        onPointerOver={() => setHoveredTopic(t.id)}
                         onPointerOut={() => setHoveredTopic(null)}
                         onClick={(e) => {
                           e.stopPropagation();
                           onTopic(t, [gx, gy, gz]);
                         }}
                       >
-                        <sphereGeometry args={[hoveredTopic === t.id ? 0.6 : 0.45, 24, 24]} />
+                        <sphereGeometry
+                          args={[
+                            isHover ? 0.28 : 0.22,
+                            20,
+                            20
+                          ]}
+                        />
                         <meshStandardMaterial
                           color={color}
                           emissive={color}
-                          emissiveIntensity={hoveredTopic === t.id ? 1 : 0.4}
+                          emissiveIntensity={isHover ? 0.9 : 0.25}
                         />
                       </mesh>
 
-                      <Billboard position={[0, hoveredTopic === t.id ? 1.2 : 1, 0]}>
-                        <Text fontSize={hoveredTopic === t.id ? 0.4 : 0.3} color="white">
+                      <Billboard position={[0, isHover ? 0.75 : 0.6, 0]}>
+                        <Text
+                          fontSize={isHover ? 0.36 : 0.30}
+                          color="white"
+                          outlineColor="black"
+                          outlineWidth={0.018}
+                        >
                           {t.title}
                         </Text>
                       </Billboard>

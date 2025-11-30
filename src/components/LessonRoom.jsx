@@ -216,95 +216,121 @@ export default function LessonRoom({ lesson, onBack }) {
     }}>
 
       {/* UI PANEL */}
+
       <div
         style={{
           position: "absolute",
-          right: 25,
-          top: 25,
-          width: "270px",
+          top: 4,
+          right: 6,
           zIndex: 30,
-          background: "rgba(15,15,15,0.85)",
-          backdropFilter: "blur(10px)",
-          borderRadius: "14px",
-          padding: "18px",
-          border: "1px solid rgba(255,255,255,0.1)",
-          color: "white"
+          display: "flex",
+          alignItems: "center",
+          gap: "6px",
+          background: "rgba(20,20,20,0.45)",
+          backdropFilter: "blur(4px)",
+          borderRadius: "8px",
+          padding: "4px 8px",
+          border: "1px solid rgba(255,255,255,0.12)",
+          color: "white",
         }}
       >
-        <h3 style={{
-          margin: 0,
-          fontSize: "1.3rem",
-          fontWeight: "bold",
-          color: "#7dd3fc",
-          borderBottom: "1px solid #333",
-          paddingBottom: 8
-        }}>
+
+        {/* آیکون بازگشت (کوچک‌تر، نزدیک‌تر) */}
+        <button
+          onClick={handleResetView}
+          title="نمای کلی"
+          style={{
+            background: "transparent",
+            border: "none",
+            fontSize: "1rem",
+            cursor: "pointer",
+            color: "#7dd3fc",
+            padding: 0,
+          }}
+        >
+          🔄
+        </button>
+
+        {/* آیکون خروج */}
+        <button
+          onClick={onBack}
+          title="خروج"
+          style={{
+            background: "transparent",
+            border: "none",
+            fontSize: "1rem",
+            cursor: "pointer",
+            color: "#f87171",
+            padding: 0,
+          }}
+        >
+          ⬅️
+        </button>
+
+        {/* عنوان درس (درشت اما خیلی جمع‌وجور) */}
+        <h3
+          style={{
+            margin: "0 4px",
+            fontSize: "1.2rem",
+            fontWeight: "900",
+            color: "#ffffff",
+            whiteSpace: "nowrap",
+            padding: 0,
+          }}
+        >
           {lesson.title}
         </h3>
 
-        <button
-          onClick={handleResetView}
-          style={{
-            marginTop: 14,
-            padding: "12px",
-            borderRadius: "10px",
-            border: "none",
-            background: "#0ea5e9",
-            color: "white",
-            cursor: "pointer",
-            fontWeight: "bold",
-            fontSize: "0.95rem",
-            width: "100%"
-          }}
-        >
-          🔍 بازگشت به نمای کلی
-        </button>
+        {/* آیکون‌های حالت نما — کوچک و نزدیک */}
+        <div style={{ display: "flex", gap: "6px", marginLeft: "auto" }}>
+          <button
+            onClick={() => { setMode("random"); handleResetView(); }}
+            title="پراکنده"
+            style={{
+              background: "transparent",
+              border: "none",
+              fontSize: "1rem",
+              cursor: "pointer",
+              color: mode === "random" ? "#38bdf8" : "#ccc",
+              padding: 0,
+            }}
+          >
+            🔀
+          </button>
 
-        <button
-          onClick={onBack}
-          style={{
-            marginTop: 10,
-            padding: "12px",
-            borderRadius: "10px",
-            border: "none",
-            background: "#ef4444",
-            color: "white",
-            cursor: "pointer",
-            fontSize: "0.95rem",
-            width: "100%"
-          }}
-        >
-          خروج
-        </button>
+          <button
+            onClick={() => { setMode("horizontal"); handleResetView(); }}
+            title="افقی"
+            style={{
+              background: "transparent",
+              border: "none",
+              fontSize: "1rem",
+              cursor: "pointer",
+              color: mode === "horizontal" ? "#38bdf8" : "#ccc",
+              padding: 0,
+            }}
+          >
+            📏
+          </button>
 
-        <div style={{ marginTop: 22 }}>
-          <span style={{ fontSize: "0.9rem", color: "#cbd5e1" }}>حالت نمایش:</span>
-          <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
-            {["random", "horizontal", "floors"].map((m) => (
-              <button
-                key={m}
-                onClick={() => {
-                  setMode(m);
-                  handleResetView();
-                }}
-                style={{
-                  flex: 1,
-                  padding: "10px",
-                  borderRadius: "8px",
-                  border: "none",
-                  background: mode === m ? "#0ea5e9" : "#333",
-                  color: "white",
-                  cursor: "pointer",
-                  fontSize: "0.85rem",
-                  fontWeight: "bold"
-                }}
-              >
-                {m === "random" ? "پراکنده" : m === "horizontal" ? "افقی" : "طبقاتی"}
-              </button>
-            ))}
-          </div>
+          <button
+            onClick={() => { setMode("floors"); handleResetView(); }}
+            title="طبقاتی"
+            style={{
+              background: "transparent",
+              border: "none",
+              fontSize: "1rem",
+              cursor: "pointer",
+              color: mode === "floors" ? "#38bdf8" : "#ccc",
+              padding: 0,
+            }}
+          >
+            🏢
+          </button>
         </div>
+
       </div>
+
 
       <Canvas camera={{ position: [0, 6, 40], fov: 50 }}>
         <ambientLight intensity={0.6} />
