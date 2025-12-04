@@ -54,11 +54,11 @@ function TopicTooltip({ topic, position, onClose }) {
   return (
     <Html
       transform={false}
-      distanceFactor={5}
+      distanceFactor={4}
       position={[
         position[0] + 0.8,
         position[1] - 0.65,
-        position[2] + 0.0,
+        position[2] - 0,
       ]}
       style={{
         background: "rgba(15,15,20,0.92)",
@@ -146,7 +146,7 @@ function TopicTooltip({ topic, position, onClose }) {
             <strong
               style={{
                 color: "#fbbf24",
-                fontSize: "3rem",
+                fontSize: "4rem",
                 display: "block",
                 marginBottom: "12px",
                 direction: detectDir(s.title),
@@ -159,7 +159,7 @@ function TopicTooltip({ topic, position, onClose }) {
             <p
               style={{
                 margin: 0,
-                fontSize: "3.2rem",
+                fontSize: "4.2rem",
                 color: "#cbd5e1",
                 lineHeight: 2.1,
                 direction: detectDir(s.content),

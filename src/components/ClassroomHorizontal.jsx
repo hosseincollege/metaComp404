@@ -22,7 +22,7 @@ export default function ClassroomHorizontal({ lesson, onTopic }) {
     <group>
       {/* مرکز بزرگ درس */}
       <mesh>
-        <sphereGeometry args={[1.2, 32, 32]} />
+        <sphereGeometry args={[0.52, 32, 32]} />
         <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.7} />
       </mesh>
 
