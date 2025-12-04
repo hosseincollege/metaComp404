@@ -393,7 +393,6 @@ export default function LessonRoom({ lesson, onBack }) {
 
         <TopicTooltip topic={selectedTopic} position={selectedTopic ? targetPosition : null} onClose={handleCloseTooltip} />
 
-        <Stars radius={80} depth={40} count={4500} fade />
       </Canvas>
     </div>
   );

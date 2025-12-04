@@ -46,7 +46,7 @@ export default function FiberLink({ start, end, color = "#4eaaff", height = 2, s
 
       {/* ب) نقطه نورانی متحرک (پالس نوری) */}
       <mesh ref={dotRef}>
-        <sphereGeometry args={[0.08, 8, 8]} />
+        <sphereGeometry args={[0, 8, 8]} />
         <meshBasicMaterial color="white" toneMapped={false} />
       </mesh>
     </group>
