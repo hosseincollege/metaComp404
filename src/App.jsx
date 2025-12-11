@@ -25,11 +25,11 @@ function normalizeLesson(raw, name) {
         name === "Algorithms" ? "#00cc66" :
         name === "IoT" ? "#aa44ff" :
         name === "Cloud" ? "#00aaff" :
-        name === "Electrical Circuits" ? "#ffcc00" :
+        name === "circuits" ? "#ffcc00" :
         name === "jame" ? "#ff6b6b" :
-        name === "Reserv 2" ? "#feca57" :
-        name === "Reserv 3" ? "#48dbfb" :
-        name === "Reserv 4" ? "#1dd1a1" :
+        name === "reserv 2" ? "#feca57" :
+        name === "reserv 3" ? "#48dbfb" :
+        name === "reserv 4" ? "#1dd1a1" :
         "#ffffff",
 
       chapters: raw.map((c, i) => ({
@@ -53,11 +53,11 @@ const LESSONS = {
   algorithms: normalizeLesson(algorithms, "Algorithms"),
   iot: normalizeLesson(iot, "IoT"),
   cloud: normalizeLesson(cloud, "Cloud"),
-  circuits: normalizeLesson(circuits, "Electrical Circuits"),
+  circuits: normalizeLesson(circuits, "circuits"),
 
   jame: normalizeLesson(jame, "jame"),
-  reserv2: normalizeLesson(reserv2, "Reserv 2"),
-  reserv3: normalizeLesson(reserv3, "Reserv 3"),
+  reserv2: normalizeLesson(reserv2, "reserv 2"),
+  reserv3: normalizeLesson(reserv3, "reserv 3"),
   reserv4: normalizeLesson(reserv4, "reserv 4"),
 };
 
