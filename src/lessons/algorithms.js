@@ -12,7 +12,7 @@ export default [
     section: "فصل ۱: تحلیل الگوریتم و پیچیدگی",
     topics: [
       {
-        title: "نمادهای مجانبی (Asymptotic Notations)",
+        title: "1- نمادهای مجانبی (Asymptotic Notations)",
         content: "آشنایی با Growth Rate و رفتار الگوریتم در مقیاس بالا.",
         subtopics: [
           {
@@ -31,7 +31,7 @@ export default [
       },
 
       {
-        title: "بهترین، متوسط و بدترین حالت",
+        title: "2- بهترین، متوسط و بدترین حالت",
         content: "",
         subtopics: [
           {
@@ -50,7 +50,7 @@ export default [
       },
 
       {
-        title: "حل روابط بازگشتی",
+        title: "3- حل روابط بازگشتی",
         content: "",
         subtopics: [
           {
@@ -70,10 +70,10 @@ export default [
      فصل ۲ — تقسیم و حل (Divide and Conquer)
   ============================================================ */
   {
-    section: "فصل ۲: تقسیم و حل (Divide and Conquer)",
+    section: "فصل ₂: تقسیم و حل (Divide and Conquer)",
     topics: [
       {
-        title: "ساختار کلی D&C",
+        title: "1- ساختار کلی D&C",
         content: "",
         subtopics: [
           { title: "Divide", content: "تقسیم مسئله به زیرمسئله‌ها." },
@@ -83,7 +83,7 @@ export default [
       },
 
       {
-        title: "Merge Sort",
+        title: "2- Merge Sort",
         content: "مرتب‌سازی با استراتژی تقسیم و حل.",
         subtopics: [
           { title: "درخت بازگشتی", content: "ساختار درختی نشان‌دهنده تعداد تقسیم‌هاست." },
@@ -92,7 +92,7 @@ export default [
       },
 
       {
-        title: "Quick Sort",
+        title: "3- Quick Sort",
         content: "",
         subtopics: [
           { title: "Pivot Selection", content: "انتخاب محور نقش مهمی دارد." },
@@ -110,7 +110,7 @@ export default [
     section: "فصل ۳: برنامه‌نویسی پویا (Dynamic Programming)",
     topics: [
       {
-        title: "مبانی DP",
+        title: "1- مبانی DP",
         content: "",
         subtopics: [
           { title: "Optimal Substructure", content: "راه‌حل بهینه از زیربخش‌های بهینه ساخته می‌شود." },
@@ -119,7 +119,7 @@ export default [
       },
 
       {
-        title: "روش Top-Down و Bottom-Up",
+        title: "2- روش Top-Down و Bottom-Up",
         content: "",
         subtopics: [
           { title: "Memoization", content: "بازگشتی + ذخیره‌سازی نتایج." },
@@ -128,7 +128,7 @@ export default [
       },
 
       {
-        title: "مسئله کوله‌پشتی ۰/۱",
+        title: "3- مسئله کوله‌پشتی ۰/۱",
         content: "",
         subtopics: [
           { title: "رابطه بازگشتی", content: "max(value[i]+…, value without i)." },
@@ -137,7 +137,7 @@ export default [
       },
 
       {
-        title: "LCS — طولانی‌ترین زیررشته مشترک",
+        title: "4- LCS — طولانی‌ترین زیررشته مشترک",
         content: "",
         subtopics: [
           { title: "رابطه DP", content: "اگر کاراکتر برابر باشد ۱+ زیرمسئله." },
@@ -146,7 +146,7 @@ export default [
       },
 
       {
-        title: "TSP با برنامه‌نویسی پویا",
+        title: "5- TSP با برنامه‌نویسی پویا",
         content: "",
         subtopics: [
           { title: "DP with Bitmask", content: "استفاده از نگاشت زیرمجموعه‌ها." },
@@ -163,7 +163,7 @@ export default [
     section: "فصل ۴: الگوریتم‌های حریصانه (Greedy)",
     topics: [
       {
-        title: "تفاوت DP و Greedy",
+        title: "1- تفاوت DP و Greedy",
         content: "",
         subtopics: [
           { title: "Local vs Global", content: "Greedy انتخاب محلی؛ DP ساخت انتخاب‌های بهینه." }
@@ -171,7 +171,7 @@ export default [
       },
 
       {
-        title: "Huffman Coding",
+        title: "2- Huffman Coding",
         content: "",
         subtopics: [
           { title: "Min-Heap", content: "ترتیب‌گذاری بر اساس فرکانس." },
@@ -180,7 +180,7 @@ export default [
       },
 
       {
-        title: "MST: Prim & Kruskal",
+        title: "3- MST: Prim & Kruskal",
         content: "",
         subtopics: [
           { title: "Prim", content: "استفاده از Priority Queue و انتخاب یال بعدی." },
@@ -189,7 +189,7 @@ export default [
       },
 
       {
-        title: "Dijkstra",
+        title: "4- Dijkstra",
         content: "",
         subtopics: [
           { title: "Relaxation", content: "به‌روزرسانی فاصله‌ها." },
@@ -206,7 +206,7 @@ export default [
     section: "فصل ۵: جستجوی فضای حالت (State-Space Search)",
     topics: [
       {
-        title: "Backtracking",
+        title: "1- Backtracking",
         content: "",
         subtopics: [
           { title: "Pruning", content: "حذف شاخه‌های غیرممکن." },
@@ -215,7 +215,7 @@ export default [
       },
 
       {
-        title: "Branch and Bound",
+        title: "2- Branch and Bound",
         content: "",
         subtopics: [
           { title: "Cost Function", content: "استفاده از Bound برای حذف مسیرهای بی‌فایده." },
@@ -232,7 +232,7 @@ export default [
     section: "فصل ۶: الگوریتم‌های گراف",
     topics: [
       {
-        title: "BFS",
+        title: "1- BFS",
         content: "",
         subtopics: [
           { title: "Queue", content: "سطح‌به‌سطح جلو می‌رود." },
@@ -241,7 +241,7 @@ export default [
       },
 
       {
-        title: "DFS",
+        title: "2- DFS",
         content: "",
         subtopics: [
           { title: "Stack / Recursion", content: "تا عمق پیش می‌رود." },
@@ -250,7 +250,7 @@ export default [
       },
 
       {
-        title: "Floyd–Warshall",
+        title: "3- Floyd–Warshall",
         content: "",
         subtopics: [
           { title: "پیچیدگی", content: "O(n³)." },
@@ -267,7 +267,7 @@ export default [
     section: "فصل ۷: نظریه پیچیدگی (P vs NP)",
     topics: [
       {
-        title: "تعاریف اصلی",
+        title: "1- تعاریف اصلی",
         content: "",
         subtopics: [
           { title: "P", content: "حل سریع در زمان چندجمله‌ای." },
@@ -278,7 +278,7 @@ export default [
       },
 
       {
-        title: "Hamiltonian vs TSP",
+        title: "2- Hamiltonian vs TSP",
         content: "",
         subtopics: [
           { title: "Hamiltonian Cycle", content: "مسئله تصمیم: آیا دور وجود دارد؟" },

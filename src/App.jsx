@@ -1,12 +1,19 @@
 import React, { useState } from "react";
 import LessonRoom from "./components/LessonRoom";
 
+// دروس اصلی
 import python from "./lessons/python";
 import networks from "./lessons/networks";
 import algorithms from "./lessons/algorithms";
 import iot from "./lessons/iot";
 import cloud from "./lessons/cloud";
 import circuits from "./lessons/circuits";
+
+// دروس رزرو
+import jame from "./lessons/jame";
+import reserved2 from "./lessons/reserved2";
+import reserved3 from "./lessons/reserved3";
+import reserved4 from "./lessons/reserved4";
 
 function normalizeLesson(raw, name) {
   if (Array.isArray(raw)) {
@@ -19,7 +26,12 @@ function normalizeLesson(raw, name) {
         name === "IoT" ? "#aa44ff" :
         name === "Cloud" ? "#00aaff" :
         name === "Electrical Circuits" ? "#ffcc00" :
+        name === "jame" ? "#ff6b6b" :
+        name === "Reserved 2" ? "#feca57" :
+        name === "Reserved 3" ? "#48dbfb" :
+        name === "Reserved 4" ? "#1dd1a1" :
         "#ffffff",
+
       chapters: raw.map((c, i) => ({
         id: "ch" + i,
         title: c.section || "Untitled",
@@ -42,18 +54,18 @@ const LESSONS = {
   iot: normalizeLesson(iot, "IoT"),
   cloud: normalizeLesson(cloud, "Cloud"),
   circuits: normalizeLesson(circuits, "Electrical Circuits"),
+
+  reserved1: normalizeLesson(jame, "jame"),
+  reserved2: normalizeLesson(reserved2, "Reserved 2"),
+  reserved3: normalizeLesson(reserved3, "Reserved 3"),
+  reserved4: normalizeLesson(reserved4, "Reserved 4"),
 };
 
 export default function App() {
   const [activeLesson, setActiveLesson] = useState(null);
 
   if (activeLesson) {
-    return (
-      <LessonRoom
-        lesson={activeLesson}
-        onBack={() => setActiveLesson(null)}
-      />
-    );
+    return <LessonRoom lesson={activeLesson} onBack={() => setActiveLesson(null)} />;
   }
 
   return (
@@ -61,27 +73,25 @@ export default function App() {
       <h1 style={styles.header}>دانشگاه متاورس</h1>
       <p style={styles.subHeader}>یک درس را انتخاب کنید</p>
 
-      <div style={styles.grid}>
-        {Object.keys(LESSONS).map((key) => {
-          const lesson = LESSONS[key];
-          return (
-            <div
-              key={key}
-              style={{ ...styles.card, borderColor: lesson.color }}
-              onClick={() => setActiveLesson(lesson)}
-            >
+      {/* ناحیه اسکرول فقط عمودی */}
+      <div style={styles.scrollArea}>
+        <div style={styles.grid}>
+          {Object.keys(LESSONS).map((key) => {
+            const lesson = LESSONS[key];
+            return (
               <div
-                style={{
-                  ...styles.icon,
-                  backgroundColor: lesson.color,
-                }}
+                key={key}
+                style={{ ...styles.card, borderColor: lesson.color }}
+                onClick={() => setActiveLesson(lesson)}
               >
-                {lesson.title.substring(0, 2).toUpperCase()}
+                <div style={{ ...styles.icon, backgroundColor: lesson.color }}>
+                  {lesson.title.substring(0, 2).toUpperCase()}
+                </div>
+                <h3 style={styles.cardTitle}>{lesson.title}</h3>
               </div>
-              <h3 style={styles.cardTitle}>{lesson.title}</h3>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </div>
   );
@@ -96,15 +106,15 @@ const styles = {
     flexDirection: "column",
     alignItems: "center",
     paddingTop: "20px",
-    overflow: "hidden", // جلوگیری از اسکرول
     color: "white",
     direction: "rtl",
     fontFamily: "sans-serif",
+    overflow: "hidden", // خود کانتینر فقط ثابت می‌مونه
   },
 
   header: {
     fontSize: "2.2rem",
-    marginBottom: "4px",
+    marginBottom: "6px",
     background: "linear-gradient(to right, #4eaaff, #a355ff)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
@@ -112,24 +122,33 @@ const styles = {
 
   subHeader: {
     fontSize: "1rem",
-    marginBottom: "14px",
+    marginBottom: "12px",
     color: "#b6c0d1",
   },
 
+  // فقط اسکرول عمودی
+  scrollArea: {
+    width: "100%",
+    height: "calc(100vh - 120px)",
+    overflowY: "auto",
+    overflowX: "hidden", // ❌ جلوگیری از اسکرول افقی
+    padding: "0 20px 40px 20px",
+    boxSizing: "border-box",
+  },
+
+  // auto‑fit باعث پر شدن خودکار صفحه می‌شود
   grid: {
     display: "grid",
-    gridTemplateColumns: "repeat(3, 140px)", // کوچکتر
-    gridTemplateRows: "repeat(2, 160px)",
-    gap: "14px 18px",
-    justifyContent: "center",
+    gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
+    gap: "22px",
+    justifyItems: "center",
     alignItems: "center",
-    marginTop: "10px",
   },
 
   card: {
     width: "140px",
     height: "160px",
-    background: "rgba(30, 41, 59, 0.8)",
+    background: "rgba(30, 41, 59, 0.9)",
     borderRadius: "14px",
     border: "2px solid #334155",
     display: "flex",
@@ -141,8 +160,8 @@ const styles = {
   },
 
   icon: {
-    width: "42px",
-    height: "42px",
+    width: "46px",
+    height: "46px",
     borderRadius: "50%",
     color: "white",
     display: "flex",
@@ -150,7 +169,6 @@ const styles = {
     justifyContent: "center",
     fontSize: "1.2rem",
     fontWeight: "bold",
-    boxShadow: "0 0 12px rgba(255,255,255,0.2)",
   },
 
   cardTitle: {

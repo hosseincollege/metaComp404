@@ -13,7 +13,7 @@ export default [
     section: "فصل ۱: معماری و اصول بنیادین اینترنت",
     topics: [
       {
-        title: "سوئیچینگ",
+        title: "1- سوئیچینگ",
         content: "",
         subtopics: [
           {
@@ -30,14 +30,9 @@ export default [
       },
 
       {
-        title: "ساختار اینترنت و ISPها",
+        title: "2- ساختار اینترنت و ISPها",
         content: "",
         subtopics: [
-          {
-            title: "Tier-1 / Tier-2 / Tier-3",
-            content:
-              "Tier-1 شبکه‌های ستون فقرات هستند؛ Tier-2 منطقه‌ای؛ Tier-3 ارائه‌دهندگان محلی برای کاربران."
-          },
           {
             title: "Peering & Transit",
             content:
@@ -47,7 +42,7 @@ export default [
       },
 
       {
-        title: "استانداردها",
+        title: "3- استانداردها",
         content: "",
         subtopics: [
           { title: "IEEE 802", content: "استاندارد شبکه LAN و WiFi." },
@@ -64,7 +59,7 @@ export default [
     section: "فصل ۲: لایه فیزیکی و لایه پیوند داده",
     topics: [
       {
-        title: "محیط‌های انتقال",
+        title: "1- محیط‌های انتقال",
         content: "",
         subtopics: [
           { title: "کابل کواکسیال", content: "پایداری بالا، تلفات کم." },
@@ -75,7 +70,7 @@ export default [
       },
 
       {
-        title: "تشخیص خطا",
+        title: "2- تشخیص خطا",
         content: "",
         subtopics: [
           { title: "Parity Bit", content: "تشخیص تک‌بیتی ساده." },
@@ -85,7 +80,7 @@ export default [
       },
 
       {
-        title: "MAC Address",
+        title: "3- MAC Address",
         content: "",
         subtopics: [
           {
@@ -108,7 +103,7 @@ export default [
     section: "فصل ۳: لایه شبکه (Network Layer)",
     topics: [
       {
-        title: "پروتکل IP",
+        title: "1- پروتکل IP",
         content: "",
         subtopics: [
           { title: "وظیفه اصلی", content: "مسیریابی بین شبکه‌ها؛ بدون تضمین تحویل." },
@@ -117,7 +112,7 @@ export default [
       },
 
       {
-        title: "پروتکل ICMP",
+        title: "2- پروتکل ICMP",
         content: "",
         subtopics: [
           { title: "Ping", content: "بررسی دسترسی و تاخیر." },
@@ -126,7 +121,7 @@ export default [
       },
 
       {
-        title: "DHCP",
+        title: "3- DHCP",
         content: "",
         subtopics: [
           { title: "Discover", content: "دستگاه درخواست آدرس می‌دهد." },
@@ -137,7 +132,7 @@ export default [
       },
 
       {
-        title: "NAT",
+        title: "4- NAT",
         content: "",
         subtopics: [
           {
@@ -152,7 +147,7 @@ export default [
       },
 
       {
-        title: "الگوریتم‌های مسیریابی",
+        title: "5- الگوریتم‌های مسیریابی",
         content: "",
         subtopics: [
           {
@@ -175,7 +170,7 @@ export default [
     section: "فصل ۴: لایه انتقال (Transport Layer)",
     topics: [
       {
-        title: "TCP vs UDP",
+        title: "1- TCP vs UDP",
         content: "",
         subtopics: [
           {
@@ -190,7 +185,7 @@ export default [
       },
 
       {
-        title: "Socket API",
+        title: "2- Socket API",
         content: "",
         subtopics: [
           { title: "Socket چیست؟", content: "رابط برنامه با لایه انتقال." },
@@ -200,7 +195,7 @@ export default [
       },
 
       {
-        title: "مکانیزم‌های TCP",
+        title: "3- مکانیزم‌های TCP",
         content: "",
         subtopics: [
           {
@@ -231,7 +226,7 @@ export default [
     section: "فصل ۵: لایه کاربرد",
     topics: [
       {
-        title: "HTTP",
+        title: "1- HTTP",
         content: "",
         subtopics: [
           {
@@ -246,7 +241,7 @@ export default [
       },
 
       {
-        title: "ایمیل",
+        title: "2- ایمیل",
         content: "",
         subtopics: [
           { title: "SMTP", content: "ارسال ایمیل — مدل Push." },
@@ -255,7 +250,7 @@ export default [
       },
 
       {
-        title: "DNS",
+        title: "3- DNS",
         content: "",
         subtopics: [
           {
@@ -278,7 +273,7 @@ export default [
     section: "فصل ۶: مفاهیم تکمیلی",
     topics: [
       {
-        title: "Bandwidth vs Throughput",
+        title: "1- Bandwidth vs Throughput",
         content: "",
         subtopics: [
           {
@@ -293,7 +288,7 @@ export default [
       },
 
       {
-        title: "Elastic Applications",
+        title: "2- Elastic Applications",
         content: "",
         subtopics: [
           { title: "تعریف", content: "برنامه‌هایی که با کاهش پهنای باند کیفیت را کاهش نمی‌دهند." },
@@ -302,7 +297,7 @@ export default [
       },
 
       {
-        title: "مالتی‌پلکسینگ",
+        title: "3- مالتی‌پلکسینگ",
         content: "",
         subtopics: [
           { title: "FDM", content: "تقسیم فرکانس بین کاربران." },

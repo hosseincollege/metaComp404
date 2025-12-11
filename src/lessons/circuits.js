@@ -8,34 +8,34 @@ export default [
     topics: [
 
       {
-        title: "تعاریف پایه مدار",
-        content: "مبانی ولتاژ، جریان، مقاومت و توان و ارتباط آن‌ها مطابق قانون اهم.",
+        title: "1- تعاریف پایه مدار",
+        content: "مبانی ولتاژ، جریان، مقاومت و توان.",
         subtopics: [
-          { title: "ولتاژ (V)", content: "اختلاف پتانسیل بین دو نقطه از مدار که نیروی حرکت الکترون‌ها را ایجاد می‌کند." },
-          { title: "جریان (I)", content: "نرخ عبور بار الکتریکی از یک نقطه از مدار." },
+          { title: "ولتاژ (V)", content: "اختلاف پتانسیل بین دو نقطه مدار." },
+          { title: "جریان (I)", content: "نرخ عبور بار الکتریکی." },
           { title: "مقاومت (R)", content: "میزان مخالفت مسیر نسبت به عبور جریان." },
-          { title: "توان (P)", content: "نرخ مصرف یا تولید انرژی در مدار، برابر P = VI." },
-          { title: "قانون اهم", content: "رابطه بنیادی بین ولتاژ، جریان و مقاومت: V = IR." },
+          { title: "توان (P)", content: "P = VI." },
+          { title: "قانون اهم", content: "V = IR." },
         ]
       },
 
       {
-        title: "اجزای ساختاری مدار",
+        title: "2- اجزای ساختاری مدار",
         content: "",
         subtopics: [
-          { title: "گره (Node)", content: "نقطه‌ای که دو یا چند عنصر به هم وصل می‌شوند." },
-          { title: "شاخه (Branch)", content: "مسیر بین دو گره که شامل یک یا چند عنصر مدار است." },
-          { title: "حلقه (Loop)", content: "مسیر بسته بدون تکرار هیچ شاخه‌ای." },
-          { title: "مش (Mesh)", content: "کوچک‌ترین حلقه‌ای که هیچ حلقه دیگری داخل آن نیست." },
+          { title: "گره", content: "اتصال دو یا چند عنصر." },
+          { title: "شاخه", content: "مسیر بین دو گره." },
+          { title: "حلقه", content: "مسیر بسته بدون تکرار شاخه." },
+          { title: "مش", content: "کوچک‌ترین حلقه بدون حلقه داخلی." },
         ]
       },
 
       {
-        title: "قوانین کیرشهف",
+        title: "3- قوانین کیرشهف",
         content: "",
         subtopics: [
-          { title: "KCL", content: "مجموع جریان‌های ورودی یک گره برابر مجموع جریان‌های خروجی است." },
-          { title: "KVL", content: "مجموع ولتاژها در یک حلقه بسته برابر صفر است." }
+          { title: "KCL", content: "مجموع جریان‌های ورودی = خروجی." },
+          { title: "KVL", content: "مجموع ولتاژهای یک حلقه = صفر." }
         ]
       },
 
@@ -50,47 +50,47 @@ export default [
     topics: [
 
       {
-        title: "تحلیل گره (Node Analysis)",
+        title: "1- تحلیل گره (Node Analysis)",
         content: "",
         subtopics: [
-          { title: "ایده اصلی", content: "ولتاژ هر گره نسبت به زمین محاسبه می‌شود، سپس معادلات KCL نوشته می‌شوند." },
-          { title: "مراحل حل", content: "۱) انتخاب زمین ۲) مشخص‌کردن ولتاژهای گره ۳) نوشتن KCL ۴) حل دستگاه معادلات." }
+          { title: "ایده اصلی", content: "محاسبه ولتاژ گره‌ها و نوشتن KCL." },
+          { title: "مراحل", content: "انتخاب زمین، تعیین ولتاژها، نوشتن KCL، حل دستگاه." }
         ]
       },
 
       {
-        title: "تحلیل مش (Mesh Analysis)",
+        title: "2- تحلیل مش (Mesh Analysis)",
         content: "",
         subtopics: [
-          { title: "ایده اصلی", content: "جریان‌های حلقه تعریف می‌شوند و از KVL برای نوشتن معادلات استفاده می‌شود." },
-          { title: "کاربرد", content: "وقتی مدار شکل مسطح (Planar) دارد، تحلیل مش معمولاً ساده‌تر است." }
+          { title: "ایده اصلی", content: "تعریف جریان‌های مش و استفاده از KVL." },
+          { title: "کاربرد", content: "مناسب مدارهای مسطح." }
         ]
       },
 
       {
-        title: "قضیه جمع آثار (Superposition)",
+        title: "3- قضیه جمع آثار (Superposition)",
         content: "",
         subtopics: [
-          { title: "نکته مهم", content: "تنها در مدارهای خطی قابل استفاده است." },
-          { title: "روش", content: "هر منبع جداگانه فعال می‌شود و بقیه خاموش می‌شوند، سپس نتایج جمع می‌شوند." }
+          { title: "شرط", content: "فقط برای مدارهای خطی." },
+          { title: "روش", content: "فعال‌سازی تک‌تک منابع و جمع نتایج." }
         ]
       },
 
       {
-        title: "قضیه تونن (Thevenin)",
+        title: "4- قضیه تونن (Thevenin)",
         content: "",
         subtopics: [
-          { title: "ولتاژ تونن Vth", content: "ولتاژ بی‌باری در پایانه‌های بار." },
-          { title: "مقاومت تونن Rth", content: "مقاومت معادل مدار با خاموش کردن منابع مستقل." }
+          { title: "Vth", content: "ولتاژ بی‌باری." },
+          { title: "Rth", content: "مقاومت معادل با خاموش‌کردن منابع." }
         ]
       },
 
       {
-        title: "قضیه نورتون (Norton)",
+        title: "5- قضیه نورتون (Norton)",
         content: "",
         subtopics: [
-          { title: "جریان Norton", content: "جریان اتصال کوتاه پایانه‌های خروجی." },
-          { title: "رابطه با تونن", content: "IN = Vth / Rth و مقاومت هر دو برابر است." }
+          { title: "IN", content: "جریان اتصال کوتاه خروجی." },
+          { title: "رابطه", content: "IN = Vth / Rth." }
         ]
       },
 
@@ -105,33 +105,33 @@ export default [
     topics: [
 
       {
-        title: "خازن (Capacitor)",
+        title: "1- خازن (Capacitor)",
         content: "",
         subtopics: [
-          { title: "تعریف", content: "عنصری که انرژی را در میدان الکتریکی ذخیره می‌کند." },
-          { title: "رابطه جریان و ولتاژ", content: "I = C dv/dt" },
-          { title: "رفتار DC", content: "در حالت پایدار DC مثل مدار باز رفتار می‌کند." }
+          { title: "تعریف", content: "ذخیره انرژی در میدان الکتریکی." },
+          { title: "رابطه", content: "I = C dv/dt." },
+          { title: "رفتار DC", content: "مدار باز." }
         ]
       },
 
       {
-        title: "سلف (Inductor)",
+        title: "2- سلف (Inductor)",
         content: "",
         subtopics: [
-          { title: "تعریف", content: "عنصری که انرژی را در میدان مغناطیسی ذخیره می‌کند." },
-          { title: "رابطه", content: "V = L di/dt" },
-          { title: "رفتار DC", content: "در حالت پایدار DC مانند اتصال کوتاه رفتار می‌کند." }
+          { title: "تعریف", content: "ذخیره انرژی در میدان مغناطیسی." },
+          { title: "رابطه", content: "V = L di/dt." },
+          { title: "رفتار DC", content: "اتصال کوتاه." }
         ]
       },
 
       {
-        title: "مدارهای RC و RL",
+        title: "3- مدارهای RC و RL",
         content: "",
         subtopics: [
-          { title: "ثابت زمانی τ", content: "τ = RC برای مدارهای RC و τ = L/R برای RL." },
-          { title: "شارژ خازن", content: "v(t) = V(1 - e^{-t/RC})" },
-          { title: "دشارژ خازن", content: "v(t) = V e^{-t/RC}" },
-          { title: "پاسخ RL", content: "i(t) = I(1 - e^{-tR/L}) یا i(t) = I e^{-tR/L}." }
+          { title: "ثابت زمانی", content: "RC = τ یا L/R = τ." },
+          { title: "شارژ RC", content: "v = V(1 - e^{-t/RC})." },
+          { title: "دشارژ", content: "v = V e^{-t/RC}." },
+          { title: "پاسخ RL", content: "i = I(1 - e^{-tR/L}) یا i = I e^{-tR/L}." }
         ]
       },
 
@@ -146,40 +146,40 @@ export default [
     topics: [
 
       {
-        title: "فیزیک نیمه‌هادی‌ها",
+        title: "1- فیزیک نیمه‌هادی",
         content: "",
         subtopics: [
-          { title: "مواد N و P", content: "N با الکترون‌های آزاد، P با حفره‌ها." },
-          { title: "پیوند PN", content: "اتصال دو ناحیه N و P و تشکیل ناحیه تهی." },
-          { title: "ناحیه تهی", content: "منطقه بدون حامل که از حرکت بار جلوگیری می‌کند." }
+          { title: "N و P", content: "N با الکترون؛ P با حفره." },
+          { title: "پیوند PN", content: "تشکیل ناحیه تهی." },
+          { title: "ناحیه تهی", content: "جلوگیری از عبور بار." }
         ]
       },
 
       {
-        title: "بایاس دیود",
+        title: "2- بایاس دیود",
         content: "",
         subtopics: [
-          { title: "بایاس مستقیم", content: "کاهش ناحیه تهی و عبور جریان (تقریب ولتاژ 0.7V)." },
-          { title: "بایاس معکوس", content: "افزایش ناحیه تهی و قطع جریان (به جز جریان نشتی)." }
+          { title: "مستقیم", content: "افت حدود 0.7V." },
+          { title: "معکوس", content: "جریان ناچیز؛ افزایش ناحیه تهی." }
         ]
       },
 
       {
-        title: "مدل‌های دیود",
+        title: "3- مدل‌های دیود",
         content: "",
         subtopics: [
-          { title: "ایده‌آل", content: "یک کلید یک‌طرفه بدون افت ولتاژ." },
-          { title: "ولتاژ ثابت", content: "در بایاس مستقیم افت ثابتی مثل 0.7V در نظر گرفته می‌شود." },
-          { title: "مقاومت دینامیکی rd", content: "مشتق مشخصه V-I برای سیگنال کوچک." }
+          { title: "ایده‌آل", content: "کلید یک‌طرفه بدون افت." },
+          { title: "ولتاژ ثابت", content: "افت ثابت حدود 0.7V." },
+          { title: "مقاومت دینامیکی", content: "شیب مشخصه." }
         ]
       },
 
       {
-        title: "تحلیل مدارات دیودی",
+        title: "4- تحلیل مدارات دیودی",
         content: "",
         subtopics: [
-          { title: "روش حدس و بررسی", content: "وضعیت روشن/خاموش دیودها فرض می‌شود و نتیجه بررسی می‌گردد." },
-          { title: "زنر", content: "عملکرد در بایاس معکوس و استفاده به عنوان رگولاتور." }
+          { title: "حدس و بررسی", content: "فرض روشن/خاموش دیود." },
+          { title: "زنر", content: "عملکرد در بایاس معکوس؛ رگولاتور." }
         ]
       },
 
@@ -194,30 +194,30 @@ export default [
     topics: [
 
       {
-        title: "ساختار BJT",
+        title: "1- ساختار BJT",
         content: "",
         subtopics: [
-          { title: "NPN و PNP", content: "انواع اصلی ترانزیستور و تفاوت در جهت جریان." },
-          { title: "پایه‌ها", content: "بیس (B)، کلکتور (C)، امیتر (E)." }
+          { title: "NPN و PNP", content: "دو نوع اصلی." },
+          { title: "پایه‌ها", content: "B، C، E." }
         ]
       },
 
       {
-        title: "روابط جریان‌ها",
+        title: "2- روابط جریان‌ها",
         content: "",
         subtopics: [
-          { title: "معادله اصلی", content: "IE = IC + IB" },
-          { title: "بهره جریان β", content: "IC = β IB" },
-          { title: "تقریب کاربردی", content: "IE ≈ IC در بسیاری تحلیل‌ها." }
+          { title: "معادله", content: "IE = IC + IB." },
+          { title: "β", content: "IC = β IB." },
+          { title: "تقریب", content: "IE ≈ IC." }
         ]
       },
 
       {
-        title: "ناحیه فعال",
+        title: "3- ناحیه فعال",
         content: "",
         subtopics: [
-          { title: "تعریف", content: "ناحیه‌ای که BJT به عنوان تقویت‌کننده کار می‌کند." },
-          { title: "شرط", content: "بایاس مستقیم بیس–امیتر و بایاس معکوس بیس–کلکتور." }
+          { title: "تعریف", content: "عملکرد تقویت‌کننده." },
+          { title: "شرط", content: "بایاس مستقیم BE و معکوس BC." }
         ]
       },
 
