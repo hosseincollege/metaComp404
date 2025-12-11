@@ -11,9 +11,9 @@ import circuits from "./lessons/circuits";
 
 // دروس رزرو
 import jame from "./lessons/jame";
-import reserved2 from "./lessons/reserved2";
-import reserved3 from "./lessons/reserved3";
-import reserved4 from "./lessons/reserved4";
+import reserv2 from "./lessons/reserv2";
+import reserv3 from "./lessons/reserv3";
+import reserv4 from "./lessons/reserv4";
 
 function normalizeLesson(raw, name) {
   if (Array.isArray(raw)) {
@@ -27,9 +27,9 @@ function normalizeLesson(raw, name) {
         name === "Cloud" ? "#00aaff" :
         name === "Electrical Circuits" ? "#ffcc00" :
         name === "jame" ? "#ff6b6b" :
-        name === "Reserved 2" ? "#feca57" :
-        name === "Reserved 3" ? "#48dbfb" :
-        name === "Reserved 4" ? "#1dd1a1" :
+        name === "Reserv 2" ? "#feca57" :
+        name === "Reserv 3" ? "#48dbfb" :
+        name === "Reserv 4" ? "#1dd1a1" :
         "#ffffff",
 
       chapters: raw.map((c, i) => ({
@@ -55,10 +55,10 @@ const LESSONS = {
   cloud: normalizeLesson(cloud, "Cloud"),
   circuits: normalizeLesson(circuits, "Electrical Circuits"),
 
-  reserved1: normalizeLesson(jame, "jame"),
-  reserved2: normalizeLesson(reserved2, "Reserved 2"),
-  reserved3: normalizeLesson(reserved3, "Reserved 3"),
-  reserved4: normalizeLesson(reserved4, "Reserved 4"),
+  jame: normalizeLesson(jame, "jame"),
+  reserv2: normalizeLesson(reserv2, "Reserv 2"),
+  reserv3: normalizeLesson(reserv3, "Reserv 3"),
+  reserv4: normalizeLesson(reserv4, "reserv 4"),
 };
 
 export default function App() {
