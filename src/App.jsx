@@ -11,15 +11,21 @@ import circuits from "./lessons/circuits";
 
 // دروس رزرو
 import jame from "./lessons/jame";
-import reserv2 from "./lessons/reserv2";
-import reserv3 from "./lessons/reserv3";
-import reserv4 from "./lessons/reserv4";
+
+import pytuni from "./lessons/pytuni";
+import netuni from "./lessons/netuni";
+import alguni from "./lessons/alguni";
+import iotuni from "./lessons/iotuni";
+import clouni from "./lessons/clouni";
+import ciruni from "./lessons/ciruni";
+
 
 function normalizeLesson(raw, name) {
   if (Array.isArray(raw)) {
     return {
       title: name,
       color:
+        // گروه اصلی
         name === "Python" ? "#306998" :
         name === "Networks" ? "#ff8844" :
         name === "Algorithms" ? "#00cc66" :
@@ -27,9 +33,14 @@ function normalizeLesson(raw, name) {
         name === "Cloud" ? "#00aaff" :
         name === "circuits" ? "#ffcc00" :
         name === "jame" ? "#ff6b6b" :
-        name === "reserv 2" ? "#feca57" :
-        name === "reserv 3" ? "#48dbfb" :
-        name === "reserv 4" ? "#1dd1a1" :
+
+        // گروه دانشگاهی (زنده، متفاوت، غیر‌بی‌رنگ، هم‌خانواده)
+        name === "pytuni" ? "#1574da" :      // آبی عمیق‌تر، زنده
+        name === "netuni" ? "#ff6a00" :      // نارنجی متمایل به تنجرین، تیز
+        name === "alguni" ? "#00b34d" :      // سبز جنگلی، زنده و غلیظ
+        name === "iotuni" ? "#8a22e6" :      // بنفش تیره و پر‌سچوریشن
+        name === "clouni" ? "#0088dd" :      // آبی متمایل به آسمانی-زنده
+        name === "ciruni" ? "#e6b800" :      // زرد کهربایی، چشم‌گیر
         "#ffffff",
 
       chapters: raw.map((c, i) => ({
@@ -56,9 +67,12 @@ const LESSONS = {
   circuits: normalizeLesson(circuits, "circuits"),
 
   jame: normalizeLesson(jame, "jame"),
-  reserv2: normalizeLesson(reserv2, "reserv 2"),
-  reserv3: normalizeLesson(reserv3, "reserv 3"),
-  reserv4: normalizeLesson(reserv4, "reserv 4"),
+  pytuni: normalizeLesson(pytuni, "pytuni"),
+  netuni: normalizeLesson(netuni, "netuni"),
+  alguni: normalizeLesson(alguni, "alguni"),
+  iotuni: normalizeLesson(iotuni, "iotuni"),
+  clouni: normalizeLesson(clouni, "clouni"),
+  ciruni: normalizeLesson(ciruni, "ciruni"),
 };
 
 export default function App() {
