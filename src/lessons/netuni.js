@@ -4,10 +4,10 @@ export default [
      بخش ۱: مفاهیم پایه و لایه‌ها
   ============================================================ */
   {
-    section: "بخش ۱: مبانی شبکه و ساختار IP",
+    section: "بخش ۱: مبانی شبکه ",
     topics: [
       {
-        title: "۱. مدل لایه‌ای TCP/IP",
+        title: "۱.TCP/IP",
         content: "آدرس‌دهی در شبکه در لایه‌های مختلفی انجام می‌شود.",
         subtopics: [
           {
@@ -21,7 +21,7 @@ export default [
         ]
       },
       {
-        title: "۲. آناتومی IPv4",
+        title: "۲.IPv4",
         content: "آدرس ۳۲ بیتی که به ۴ بخش ۸ بیتی (Octet) تقسیم می‌شود (مثال: 192.168.1.1).",
         subtopics: [
           {
@@ -37,7 +37,7 @@ export default [
      بخش ۲: کلاس‌بندی آدرس‌ها (Classful Addressing)
   ============================================================ */
   {
-    section: "بخش ۲: آدرس‌دهی کلاسیک (Classful)",
+    section: " ۲: آدرس‌دهی کلاسیک (Classful)",
     topics: [
       {
         title: "۱. کلاس A (شبکه‌های کلان)",
@@ -90,10 +90,10 @@ export default [
      بخش ۳: آدرس‌دهی مدرن (Classless & Subnetting)
   ============================================================ */
   {
-    section: "بخش ۳: آدرس‌دهی مدرن (CIDR و Subnetting)",
+    section: " ۳: آدرس‌دهی مدرن (CIDR)",
     topics: [
       {
-        title: "۱. محدودیت روش Classful",
+        title: "۱. محدودیت Classful",
         content: "روش کلاسی باعث هدر رفتن شدید IP می‌شد (مثلاً نیاز به ۵۰۰ آی‌پی داشتید اما مجبور بودید کلاس B با ۶۵۰۰۰ آی‌پی بردارید).",
         subtopics: [
           {
@@ -103,7 +103,7 @@ export default [
         ]
       },
       {
-        title: "۲. مفهوم Subnet Mask و VLSM",
+        title: "۲. Subnet Mask و VLSM",
         content: "Subnet Mask تعیین می‌کند کدام بیت‌ها متعلق به شبکه هستند (عدد ۱) و کدام‌ها برای هاست (عدد ۰).",
         subtopics: [
           {
@@ -123,10 +123,10 @@ export default [
      بخش ۴: انواع ارسال و آدرس‌های خاص
   ============================================================ */
   {
-    section: "بخش ۴: روش‌های ارسال و آدرس‌های رزرو شده",
+    section: " ۴: روش‌های ارسال",
     topics: [
       {
-        title: "۱. انواع ارسال (Transmission)",
+        title: "۱. ارسال (Transmission)",
         content: "نحوه ارتباط فرستنده با گیرندگان.",
         subtopics: [
           {
@@ -168,10 +168,10 @@ export default [
      بخش ۵: سرویس‌های زیرساختی (NAT & DHCP)
   ============================================================ */
   {
-    section: "بخش ۵: سرویس‌های حیاتی (NAT و DHCP)",
+    section: " ۵:  (NAT و DHCP)",
     topics: [
       {
-        title: "۱. آدرس‌های Private vs Public",
+        title: "۱. Private vs Public",
         content: "جهت امنیت و صرفه‌جویی، IPها دو دسته شدند.",
         subtopics: [
           {
@@ -185,7 +185,7 @@ export default [
         ]
       },
       {
-        title: "۲. پروتکل NAT (ترجمه آدرس)",
+        title: "۲. NAT (ترجمه آدرس)",
         content: "وظیفه تبدیل IP خصوصی به عمومی برای دسترسی به اینترنت.",
         subtopics: [
           {
@@ -195,7 +195,7 @@ export default [
         ]
       },
       {
-        title: "۳. پروتکل DHCP",
+        title: "۳. DHCP",
         content: "پیکربندی خودکار شبکه.",
         subtopics: [
           {
@@ -211,10 +211,10 @@ export default [
      بخش ۶: مدیریت شبکه داخلی (VLAN)
   ============================================================ */
   {
-    section: "بخش ۶: شبکه محلی مجازی (VLAN)",
+    section: " ۶: شبکه محلی مجازی (VLAN)",
     topics: [
       {
-        title: "۱. تعریف VLAN",
+        title: "۱. تعریف",
         content: "تقسیم منطقی یک سوئیچ فیزیکی به چند شبکه جداگانه.",
         subtopics: [
           {
@@ -224,7 +224,7 @@ export default [
         ]
       },
       {
-        title: "۲. ارتباطات در VLAN",
+        title: "۲. ارتباطات",
         content: "چگونگی انتقال داده بین سوئیچ‌ها.",
         subtopics: [
           {
@@ -240,10 +240,10 @@ export default [
      بخش ۷: مسیریابی و الگوریتم‌ها (Routing)
   ============================================================ */
   {
-    section: "بخش ۷: اصول و پروتکل‌های مسیریابی",
+    section: " ۷: مسیریابی",
     topics: [
       {
-        title: "۱. مفاهیم اولیه",
+        title: "۱. مفاهیم",
         content: "روتر (Router) دستگاه لایه ۳ است که بهترین مسیر را برای بسته انتخاب می‌کند.",
         subtopics: [
           {
@@ -257,7 +257,7 @@ export default [
         ]
       },
       {
-        title: "۲. انواع مسیریابی",
+        title: "۲. انواع",
         content: "چگونه جدول پر می‌شود؟",
         subtopics: [
           {
@@ -271,7 +271,7 @@ export default [
         ]
       },
       {
-        title: "۳. پروتکل RIP (قدیمی)",
+        title: "۳. RIP (قدیمی)",
         content: "از نوع Distance Vector.",
         subtopics: [
           {
@@ -281,7 +281,7 @@ export default [
         ]
       },
       {
-        title: "۴. پروتکل OSPF (پیشرفته)",
+        title: "۴. OSPF (پیشرفته)",
         content: "از نوع Link State و محبوب‌ترین پروتکل دنیا.",
         subtopics: [
           {
@@ -297,7 +297,7 @@ export default [
      بخش ۸: Classful Addressing
   ============================================================ */
   {
-    section: "بخش ۸: آدرس‌دهی Classful",
+    section: " ۸: آدرس‌دهی Classful",
     topics: [
       {
         title: "۱. مفهوم Classful",
@@ -366,7 +366,7 @@ export default [
      بخش ۹: Classless Addressing
   ============================================================ */
   {
-    section: "بخش ۹: آدرس‌دهی Classless",
+    section: " ۹: آدرس‌دهی Classless",
     topics: [
       {
         title: "۱. مفهوم Classless",
@@ -431,7 +431,7 @@ export default [
      بخش ۱۰: Subnetting
   ============================================================ */
   {
-    section: "بخش ۱۰: Subnetting",
+    section: " ۱۰: Subnetting",
     topics: [
       {
         title: "۱. مفهوم Subnetting",
@@ -503,7 +503,7 @@ export default [
     بخش ۱۱: مسیر کامل آدرس‌دهی IPv4
   ============================================================ */
   {
-    section: "بخش ۱۱: مسیر کامل آدرس‌دهی IPv4",
+    section: " ۱۱: آدرس‌دهی IPv4",
     topics: [
       {
         title: "۱. آدرس IP ",
@@ -593,7 +593,7 @@ export default [
     بخش ۱۲: آدرس‌دهی IPv6
   ============================================================ */
   {
-    section: "بخش ۱۲: آدرس‌دهی IPv6",
+    section: " ۱۲: آدرس‌دهی IPv6",
     topics: [
       {
         title: "۱.  IPv6 ",
@@ -626,7 +626,7 @@ export default [
         ]
       },
       {
-        title: "۴. ساختار نوشتاری",
+        title: "۴. ساختار",
         content: "IPv6 به صورت ۸ گروه ۱۶ بیتی هگزادسیمال با علامت ':' نوشته می‌شود.",
         subtopics: [
           {

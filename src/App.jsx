@@ -19,6 +19,7 @@ import iotuni from "./lessons/iotuni";
 import clouni from "./lessons/clouni";
 import ciruni from "./lessons/ciruni";
 
+import pytam from "./lessons/pytam";
 
 function normalizeLesson(raw, name) {
   if (Array.isArray(raw)) {
@@ -41,6 +42,7 @@ function normalizeLesson(raw, name) {
         name === "iotuni" ? "#8a22e6" :      // بنفش تیره و پر‌سچوریشن
         name === "clouni" ? "#0088dd" :      // آبی متمایل به آسمانی-زنده
         name === "ciruni" ? "#e6b800" :      // زرد کهربایی، چشم‌گیر
+        name === "pytam" ? "#0961c0" :
         "#ffffff",
 
       chapters: raw.map((c, i) => ({
@@ -73,6 +75,8 @@ const LESSONS = {
   iotuni: normalizeLesson(iotuni, "iotuni"),
   clouni: normalizeLesson(clouni, "clouni"),
   ciruni: normalizeLesson(ciruni, "ciruni"),
+
+  pytam: normalizeLesson(pytam, "pytam"),
 };
 
 export default function App() {
